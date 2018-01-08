@@ -101,6 +101,7 @@ def main():
 
     train_datasets = TIN200Data(
         '/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt')
+    print(train_datasets[12])
     val_datasets = TIN200Data('/data1/tiny-imagenet-200',
                               '/data1/tiny-imagenet-200/wnids.txt', 'val')
     # test_datasets = TIN200Data(
