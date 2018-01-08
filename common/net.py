@@ -16,10 +16,10 @@ class VGGNet(nn.Module):
             nn.Conv2d(in_channels=3, out_channels=64, kernel_size=3, stride=1, padding=1, dilation=1, groups=1, bias=False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=64, affine=False),
-            nn.Conv2d(64, 64, 3, 1, 1, 1, 1, False),
+            nn.Conv2d(64, 128, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=64, affine=False),
-            nn.Conv2d(64, 64, 3, 1, 1, 1, 1, False),
+            nn.Conv2d(128, 128, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=64, affine=False)
         )
@@ -27,13 +27,13 @@ class VGGNet(nn.Module):
         self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2, dilation=1)
 
         self.conv2 = nn.Sequential(
-            nn.Conv2d(64, 128, 3, 1, 1, 1, 1, False),
+            nn.Conv2d(128, 256, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=128, affine=False),
-            nn.Conv2d(128, 128, 3, 1, 1, 1, 1, False),
+            nn.Conv2d(256, 512, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=128, affine=False),
-            nn.Conv2d(128, 128, 3, 1, 1, 1, 1, False),
+            nn.Conv2d(512, 256, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=128, affine=False)
         )
@@ -41,7 +41,7 @@ class VGGNet(nn.Module):
         self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2, dilation=1)
 
         self.conv3 = nn.Sequential(
-            nn.Conv2d(128, 256, 3, 1, 1, 1, 1, False),
+            nn.Conv2d(256, 256, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=256, affine=False),
             nn.Conv2d(256, 256, 3, 1, 1, 1, 1, False),
