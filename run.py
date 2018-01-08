@@ -18,7 +18,7 @@ from common.dataset import TIN200Data
 from common.utils import localtime, save
 
 
-def train(model, loss_fn, optimizer, num_epochs=3, loader=None):
+def train(model, loss_fn, optimizer, num_epochs=1, loader=None):
     num_correct = 0
     num_samples = 0
     for epoch in range(num_epochs):
@@ -115,7 +115,7 @@ def main():
     optimizer = optim.Adam(params=net.parameters(), lr=1e-4)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(net, loss_fn, optimizer, num_epochs=10, loader=train_loader)
+    train(net, loss_fn, optimizer, num_epochs=3, loader=train_loader)
     check_accuracy(net, val_loader)
 
     save(net)
