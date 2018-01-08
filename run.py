@@ -111,7 +111,7 @@ def main():
     net = VGGNet()
     net.cuda()
 
-    optimizer = optim.Adam(params=net.parameters(), lr=1e-4)
+    optimizer = optim.Adam(params=net.parameters(), lr=1e-3)
     loss_fn = nn.CrossEntropyLoss()
 
     train(net, loss_fn, optimizer, num_epochs=1, loader=train_loader)
