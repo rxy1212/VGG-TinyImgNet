@@ -14,8 +14,8 @@ import torch.optim as optim
 import torch.utils.data as data
 from torch.autograd import Variable
 from common.net import VGGNet
-from common.utils import localtime
 from common.dataset import TIN200Data
+from common.utils import localtime, save
 
 
 def train(model, loss_fn, optimizer, num_epochs=1, loader=None):
@@ -109,13 +109,14 @@ def main():
     train_loader = data.DataLoader(train_datasets, batch_size=64, shuffle=True, num_workers=4)
     val_loader = data.DataLoader(val_datasets, batch_size=64, shuffle=True, num_workers=4)
 
-    model = VGGNet().type(torch.cuda.FloatTensor)
-    optimizer = optim.Adam(params=model.parameters(), lr=1e-4)
+    net = VGGNet().type(torch.cuda.FloatTensor)
+    optimizer = optim.Adam(params=net.parameters(), lr=1e-4)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(model, loss_fn, optimizer, num_epochs=10, loader=train_loader)
-    check_accuracy(model, val_loader)
+    train(net, loss_fn, optimizer, num_epochs=10, loader=train_loader)
+    check_accuracy(net, val_loader)
 
+    save(net)
 
 if __name__ == '__main__':
     main()
