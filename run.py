@@ -18,17 +18,17 @@ from common.dataset import TIN200Data
 from common.utils import localtime, save
 
 
-def train(model, loss_fn, optimizer, num_epochs=1, loader=None):
+def train(net, loss_fn, optimizer, num_epochs=1, loader=None):
     num_correct = 0
     num_samples = 0
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
-        model.train()
+        net.train()
         for t, (x, y) in enumerate(loader):
             x_train = Variable(x.cuda())
             y_train = Variable(y.cuda())
 
-            scores = model(x_train)
+            scores = net(x_train)
             loss = loss_fn(scores, y_train)
 
             # reference https://discuss.pytorch.org/t/argmax-with-pytorch/1528
@@ -38,34 +38,33 @@ def train(model, loss_fn, optimizer, num_epochs=1, loader=None):
             num_samples += preds.size(0)
             acc = float(num_correct) / num_samples
             if (t + 1) % 20 == 0:
-                print('t = %d, loss = %.4f, acc = %.4f' %
-                      (t + 1, loss.data[0], acc))
+                print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.4f}')
 
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
 
-def check_accuracy(model, loader):
+def check_accuracy(net, loader):
     print('Checking accuracy on validation set')
 
     num_correct = 0
     num_samples = 0
-    # Put the model in test mode (the opposite of model.train(), essentially)
-    model.eval()
+    # Put the net in test mode (the opposite of net.train(), essentially)
+    net.eval()
     for x, y in loader:
         # reference https://pytorch-cn.readthedocs.io/zh/latest/notes/autograd/
         x_var = Variable(x, volatile=True)
 
-        scores = model(x_var.type(torch.cuda.FloatTensor))
+        scores = net(x_var.type(torch.cuda.FloatTensor))
         _, preds = scores.data.cpu().max(1)
         num_correct += (preds == y).sum()
         num_samples += preds.size(0)
     acc = float(num_correct) / num_samples
-    print('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
+    print(f'Got {num_correct} / {num_samples} correct ({100 * acc:.4f})')
 
 
-def predict(model, loader):
+def predict(net, loader):
     from os.path import join as pjoin
 
     print('Predicting on test set')
@@ -82,10 +81,10 @@ def predict(model, loader):
         classid_map = {index: classid for index,
                        classid in enumerate(content)}
 
-    model.eval()
+    net.eval()
     for x in loader:
         x_var = Variable(x, volatile=True)
-        scores = model(x_var.type(torch.cuda.FloatTensor))
+        scores = net(x_var.type(torch.cuda.FloatTensor))
         _, preds = scores.data.cpu().max(1)
         classid += [classid_map[p] for p in preds]
 
