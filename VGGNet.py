@@ -11,6 +11,8 @@ import torchvision.transforms as T
 from torchvision import models
 from common.dataset import TIN200Data
 
+gpu_type = torch.cuda.FloatTensor
+
 class Flatten(nn.Module):
     def forward(self, x):
         N, C, H, W = x.size()
@@ -136,9 +138,9 @@ def check_accuracy(model, loader):
     num_samples = 0
     model.eval()               # Put the model in test mode (the opposite of model.train(), essentially)
     for x, y in loader:
-        x_var = Variable(x, volatile=True)
+        x_var = Variable(x.cuda())
 
-        scores = model(x_var.cuda())
+        scores = model(x_var)
         _, preds = scores.data.cpu().max(1)
         num_correct += (preds == y).sum()
         num_samples += preds.size(0)
