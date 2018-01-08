@@ -18,7 +18,7 @@ from common.dataset import TIN200Data
 from common.utils import localtime, save
 
 
-def train(model, loss_fn, optimizer, num_epochs=1, loader=None):
+def train(model, loss_fn, optimizer, num_epochs=3, loader=None):
     num_correct = 0
     num_samples = 0
     for epoch in range(num_epochs):
@@ -101,7 +101,6 @@ def main():
 
     train_datasets = TIN200Data(
         '/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt')
-    print(train_datasets[12][1])
     val_datasets = TIN200Data('/data1/tiny-imagenet-200',
                               '/data1/tiny-imagenet-200/wnids.txt', 'val')
     # test_datasets = TIN200Data(
