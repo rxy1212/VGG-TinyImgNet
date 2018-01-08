@@ -13,58 +13,58 @@ class VGGNet(nn.Module):
     def __init__(self):
         super(VGGNet, self).__init__()
         self.conv1 = nn.Sequential(
-            nn.Conv2d(3, 64, 3, 1, 1, 0, 1, False),
+            nn.Conv2d(in_channels=3, out_channels=64, kernel_size=3, stride=1, padding=1, dilation=1, groups=1, bias=False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=64, affine=False),
-            nn.Conv2d(64, 64, 3, 1, 1, 0, 1, False),
+            nn.Conv2d(64, 64, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=64, affine=False),
-            nn.Conv2d(64, 64, 3, 1, 1, 0, 1, False),
+            nn.Conv2d(64, 64, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=64, affine=False)
         )
 
-        self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2, dilation=0)
+        self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2, dilation=1)
 
         self.conv2 = nn.Sequential(
-            nn.Conv2d(64, 128, 3, 1, 1, 0, 1, False),
+            nn.Conv2d(64, 128, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=128, affine=False),
-            nn.Conv2d(128, 128, 3, 1, 1, 0, 1, False),
+            nn.Conv2d(128, 128, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=128, affine=False),
-            nn.Conv2d(128, 128, 3, 1, 1, 0, 1, False),
+            nn.Conv2d(128, 128, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=128, affine=False)
         )
 
-        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2, dilation=0)
+        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2, dilation=1)
 
         self.conv3 = nn.Sequential(
-            nn.Conv2d(128, 256, 3, 1, 1, 0, 1, False),
+            nn.Conv2d(128, 256, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=256, affine=False),
-            nn.Conv2d(256, 256, 3, 1, 1, 0, 1, False),
+            nn.Conv2d(256, 256, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=256, affine=False),
-            nn.Conv2d(256, 256, 3, 1, 1, 0, 1, False),
+            nn.Conv2d(256, 256, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=256, affine=False)
         )
 
         self.conv4 = nn.Sequential(
-            nn.Conv2d(256, 512, 3, 1, 1, 0, 1, False),
+            nn.Conv2d(256, 512, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=512, affine=False),
-            nn.Conv2d(512, 512, 3, 1, 1, 0, 1, False),
+            nn.Conv2d(512, 512, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=512, affine=False),
-            nn.Conv2d(512, 512, 3, 1, 1, 0, 1, False),
+            nn.Conv2d(512, 512, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=512, affine=False)
         )
 
-        self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2, dilation=0)
+        self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2, dilation=1)
 
         self.flatten = lambda x: x.view(x.size(0), -1)
 
