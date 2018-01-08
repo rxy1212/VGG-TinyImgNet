@@ -61,7 +61,7 @@ def check_accuracy(net, loader):
         num_correct += (preds == y).sum()
         num_samples += preds.size(0)
     acc = float(num_correct) / num_samples
-    print(f'Got {num_correct} / {num_samples} correct ({100 * acc:.4f}%)')
+    print(f'Got {num_correct} / {num_samples} correct ({100 * acc:.2f}%)')
 
 
 def predict(net, loader):
