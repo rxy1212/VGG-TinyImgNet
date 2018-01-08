@@ -25,8 +25,8 @@ def train(model, loss_fn, optimizer, num_epochs=1, loader=None):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         model.train()
         for t, (x, y) in enumerate(loader):
-            x_train = Variable(x.type(torch.cuda.FloatTensor))
-            y_train = Variable(y.type(torch.cuda.FloatTensor))
+            x_train = Variable(x.cuda())
+            y_train = Variable(y.cuda())
 
             scores = model(x_train)
             loss = loss_fn(scores, y_train)
@@ -110,7 +110,9 @@ def main():
     train_loader = data.DataLoader(train_datasets, batch_size=64, shuffle=True, num_workers=4)
     val_loader = data.DataLoader(val_datasets, batch_size=64, shuffle=True, num_workers=4)
 
-    net = VGGNet().type(torch.cuda.FloatTensor)
+    net = VGGNet()
+    net.cuda()
+
     optimizer = optim.Adam(params=net.parameters(), lr=1e-4)
     loss_fn = nn.CrossEntropyLoss()
 

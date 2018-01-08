@@ -30,15 +30,13 @@ class TIN200Data(data.Dataset):
 
     def __init__(self, root, label_map, data_dir='train',
                  loader=lambda path: Image.open(path).convert('RGB'),
-                 transform=transforms.ToTensor(),
-                 t_transform=lambda label: torch.IntTensor(label)):
+                 transform=transforms.ToTensor()):
         assert data_dir in ('train', 'val', 'test'), "data_dir must be 'train', 'val' or 'test'"
         self.imgs = []
         self.labels = []
         self.data_dir = data_dir
         self.loader = loader
         self.transform = transform
-        self.t_transform = t_transform
 
         with open(label_map, 'r') as f:  # wnids.txt
             content = [x.strip() for x in f.readlines()]
@@ -77,9 +75,8 @@ class TIN200Data(data.Dataset):
             return img
 
         img = self.imgs[index]
-        label = self.labels[index]
         img = self.transform(self.loader(img))
-        label = self.t_transform(label)
+        label = self.labels[index]
         return img, label
 
     def __len__(self):
