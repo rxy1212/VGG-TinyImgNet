@@ -17,12 +17,12 @@ def localtime():
     return time.strftime('%Y%m%d%H%M%S', time.localtime())
 
 
-def save(net, state_dic=True):
+def save(net, state_dict=True):
     '''
     Save a network
     '''
-    if state_dic:
-        torch.save(net.state_dic(), f'./saved_nets/net_state_{localtime()}.pkl')
+    if state_dict:
+        torch.save(net.state_dict(), f'./saved_nets/net_state_{localtime()}.pkl')
     else:
         torch.save(net, f'./saved_nets/net_{localtime()}.pkl')
 
@@ -34,7 +34,7 @@ def restore(pkl_path, model_class=None):
     if model_class != None:
         try:
             model = model_class()
-            return model.load_state_dic(torch.load(pkl_path))
+            return model.load_state_dict(torch.load(pkl_path))
         except:
             raise ValueError('model_class must match with the model you want to restore')
 
