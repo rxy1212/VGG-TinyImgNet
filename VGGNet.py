@@ -1,38 +1,17 @@
 import numpy as np 
 import torch
+import os
 import torch.nn as nn
 import torch.optim as optim
-# from torch.utils.data import TensorDataset
 import torch.utils.data as data
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 import torchvision.transforms as T
+from torchvision import models
 from common.dataset import TIN200Data
 
-# from parse_data import Reader
-
-
-
 gpu_type = torch.cuda.FloatTensor
-# class Mydatasets(data.Dataset):
-#     def __init__(self, dataset, labels, transform=None, target_transform=None):
-#         self.dataset = dataset
-#         self.labels = labels
-#         self.transform = transform
-#         self.target_transform = target_transform
-
-#     def __getitem__(self, index):
-#         data, target = self.dataset[index], self.labels[index]
-#         if self.transform is not None:
-#             data = self.transform(data)
-#         if self.target_transform is not None:
-#             target = self.target_transform(target)
-#         return data, target
-
-#     def __len__(self):
-#         return len(self.dataset)
-
 
 class Flatten(nn.Module):
     def forward(self, x):
@@ -171,17 +150,17 @@ def check_accuracy(model, loader):
 
 def main():
     torch.cuda.is_available()
+    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
     mytransform = T.ToTensor()
-    # train_datasets = Mydatasets(train_data, train_labels, transform=mytransform )
-    # val_datasets = Mydatasets(val_data, val_labels, transform=mytransform)
+
     train_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='train')
     val_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='val')
 
     train_loader = DataLoader(train_data, batch_size=16, shuffle=True, num_workers=2)
     val_loader = DataLoader(val_data, batch_size=16, shuffle=True, num_workers=2)
 
-    # model = Model()
-    model = Model().type(gpu_type)
+    model = models.vgg11()
+    # model = Model().type(gpu_type)
     optimizer = optim.SGD(params=model.parameters(), lr=0.05, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
