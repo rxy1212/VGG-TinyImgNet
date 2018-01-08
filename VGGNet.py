@@ -11,8 +11,6 @@ import torchvision.transforms as T
 from torchvision import models
 from common.dataset import TIN200Data
 
-gpu_type = torch.cuda.FloatTensor
-
 class Flatten(nn.Module):
     def forward(self, x):
         N, C, H, W = x.size()
@@ -113,8 +111,8 @@ def train(model, loss_fn, optimizer, num_epochs = 1, loader=None):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         model.train()
         for t, (x, y) in enumerate(loader):
-            x_train = Variable(x.type(gpu_type))
-            y_train = Variable(y.type(gpu_type).long())
+            x_train = Variable(x.cuda())
+            y_train = Variable(y.cuda())
 
             scores = model(x_train)
             loss = loss_fn(scores, y_train)
@@ -140,7 +138,7 @@ def check_accuracy(model, loader):
     for x, y in loader:
         x_var = Variable(x, volatile=True)
 
-        scores = model(x_var.type(gpu_type))
+        scores = model(x_var.cuda())
         _, preds = scores.data.cpu().max(1)
         num_correct += (preds == y).sum()
         num_samples += preds.size(0)
@@ -159,8 +157,8 @@ def main():
     train_loader = DataLoader(train_data, batch_size=16, shuffle=True, num_workers=2)
     val_loader = DataLoader(val_data, batch_size=16, shuffle=True, num_workers=2)
 
-    model = models.vgg11()
-    # model = Model().type(gpu_type)
+    model = models.vgg11().cuda()
+    # model = Model().cuda()
     optimizer = optim.SGD(params=model.parameters(), lr=0.05, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
