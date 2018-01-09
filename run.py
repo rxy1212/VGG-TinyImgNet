@@ -16,6 +16,7 @@ from torch.autograd import Variable
 from common.net import VGGNet
 from common.dataset import TIN200Data
 from common.utils import localtime, save
+import torchvision.models as models
 
 
 def train(model, loss_fn, optimizer, num_epochs=1, loader=None):
@@ -109,7 +110,8 @@ def main():
     train_loader = data.DataLoader(train_datasets, batch_size=64, shuffle=True, num_workers=4)
     val_loader = data.DataLoader(val_datasets, batch_size=64, shuffle=True, num_workers=4)
 
-    net = VGGNet()
+    #net = VGGNet()
+    net = models.densenet161()
     net.cuda()
 
     optimizer = optim.Adam(params=net.parameters(), lr=5e-5)
