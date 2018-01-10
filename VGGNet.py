@@ -59,11 +59,11 @@ class Model(nn.Module):
                         )
         self.fc = nn.Sequential(
                         Flatten(),
-                        nn.Linear(8*8*512, 2048, bias=False),
+                        nn.Linear(8*8*512, 2048),
                         nn.Dropout2d(p=0.5, inplace=True),
-                        nn.Linear(2048, 1024, bias=False),
+                        nn.Linear(2048, 1024),
                         nn.Dropout2d(p=0.5, inplace=True),
-                        nn.Linear(1024, 200, bias=False),
+                        nn.Linear(1024, 200),
                         nn.Softmax(),
                         )
 
@@ -123,7 +123,7 @@ def train(model, loss_fn, optimizer, num_epochs = 1, loader=None):
             num_correct += (preds == y).sum()
             num_samples += preds.size(0)
             acc = float(num_correct) / num_samples
-            if (t + 1) % 20 == 0:
+            if (t + 1) % 100 == 0:
                 print('t = %d, loss = %.4f, acc = %.4f' % (t + 1, loss.data[0], acc))
 
             optimizer.zero_grad()
@@ -145,12 +145,12 @@ def check_accuracy(model, loader):
         num_correct += (preds == y).sum()
         num_samples += preds.size(0)
         acc = float(num_correct) / num_samples
-        print('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
+    print('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
 
 
 def main():
-    torch.cuda.is_available()
     os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+    torch.cuda.is_available()
     mytransform = T.ToTensor()
 
     train_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='train')
@@ -161,11 +161,14 @@ def main():
 
     model = models.vgg11().cuda()
     # model = Model().cuda()
-    optimizer = optim.SGD(params=model.parameters(), lr=0.05, momentum=0.9, weight_decay=1e-06, nesterov=True)
+    model = Test_Model().cuda()
+    model.load_state_dict(torch.load('./net_params/net_params6.pkl'))
+    optimizer = optim.SGD(params=model.parameters(), lr=0.005, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(model, loss_fn, optimizer, num_epochs = 3, loader=train_loader)
+    train(model, loss_fn, optimizer, num_epochs = 20, loader=train_loader)
     check_accuracy(model, val_loader)
+    torch.save(model.state_dict(),'./net_params/net_params7.pkl')
 
   
 
