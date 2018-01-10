@@ -98,7 +98,7 @@ def predict(model, loader):
 
 
 def main():
-    os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "2"
     torch.cuda.is_available()
 
     train_datasets = TIN200Data(
@@ -117,10 +117,10 @@ def main():
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(12,40,12,200,4)
     net.cuda()
-    optimizer = optim.SGD(params=net.parameters(), lr=5e-3, momentum=0.99, weight_decay= 1e-6, nesterov=True)
+    optimizer = optim.SGD(params=net.parameters(), lr=6e-3, momentum=0.99, weight_decay= 1e-6, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(net, loss_fn, optimizer, num_epochs=3, loader=train_loader)
+    train(net, loss_fn, optimizer, num_epochs=10, loader=train_loader)
     check_accuracy(net, val_loader)
 
     save(net)
