@@ -21,7 +21,7 @@ class VGGNet(nn.Module):
             nn.BatchNorm2d(num_features=64, affine=False),
             nn.Conv2d(128, 128, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
-            nn.BatchNorm2d(num_features=64, affine=False)
+            nn.BatchNorm2d(num_features=128, affine=False)
         )
 
         self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2, dilation=1)
