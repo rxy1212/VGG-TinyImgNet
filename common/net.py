@@ -30,7 +30,7 @@ class VGGNet(nn.Module):
             nn.Conv2d(256, 256, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=256, momentum=0.9, affine=False),
-            nn.Conv2d(512, 512, 3, 1, 1, 1, 1, False),
+            nn.Conv2d(256, 512, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=512, momentum=0.9, affine=False),
             nn.Conv2d(512, 512, 3, 1, 1, 1, 1, False),
