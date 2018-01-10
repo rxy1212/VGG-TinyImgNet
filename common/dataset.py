@@ -28,8 +28,7 @@ class TIN200Data(data.Dataset):
     '''
 
     def __init__(self, root, label_map, data_dir='train',
-                 loader=lambda path: Image.open(path).convert('RGB'),
-                 transform=transforms.ToTensor()):
+                 loader=None, transform=transforms.ToTensor()):
         assert data_dir in ('train', 'val', 'test'), "data_dir must be 'train', 'val' or 'test'"
         self.imgs = []
         self.labels = []
@@ -67,7 +66,13 @@ class TIN200Data(data.Dataset):
                 if files:
                     self.imgs += [abspath(pjoin(path, f)) for f in files]
 
+    def _loader(self, path):
+        return Image.open(path).convert('RGB')
+
     def __getitem__(self, index):
+        if self.loader is None:
+            self.loader = self._loader
+
         if self.data_dir == 'test':
             img = self.imgs[index]
             img = self.transform(self.loader(img))
