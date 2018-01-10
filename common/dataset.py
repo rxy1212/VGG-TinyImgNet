@@ -27,17 +27,18 @@ class TIN200Data(data.Dataset):
     - t_transform: Transfrom a label to specified format
     '''
 
-    def __init__(self, root, label_map, data_dir='train',
+    def __init__(self, root, data_dir='train',
                  loader=None, transform=transforms.ToTensor()):
         assert data_dir in ('train', 'val', 'test'), "data_dir must be 'train', 'val' or 'test'"
-        self.root = pjoin(root, 'tiny-imagenet-200')
         self.imgs = []
         self.labels = []
         self.data_dir = data_dir
         self.loader = loader
         self.transform = transform
+        self.root = pjoin(root, 'tiny-imagenet-200')
+        self.label_map_path = pjoin(root, 'tiny-imagenet-200', 'wnids.txt')
 
-        with open(label_map, 'r') as f:  # wnids.txt
+        with open(self.label_map_path, 'r') as f:  # wnids.txt
             content = [x.strip() for x in f.readlines()]
             # map string classid to 0-199 interger label
             self.label_map = {classid: index for index, classid in enumerate(content)}
