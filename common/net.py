@@ -18,7 +18,7 @@ class VGGNet(nn.Module):
             nn.BatchNorm2d(num_features=64, momentum=0.9, affine=False),
             nn.Conv2d(64, 128, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
-            nn.BatchNorm2d(num_features=64, momentum=0.9, affine=False),
+            nn.BatchNorm2d(num_features=128, momentum=0.9, affine=False),
             nn.Conv2d(128, 256, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=256, momentum=0.9, affine=False)
@@ -41,7 +41,7 @@ class VGGNet(nn.Module):
         self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2, dilation=1)
 
         self.conv3 = nn.Sequential(
-            nn.Conv2d(256, 256, 3, 1, 1, 1, 1, False),
+            nn.Conv2d(512, 256, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=256, momentum=0.9, affine=False),
             nn.Conv2d(256, 256, 3, 1, 1, 1, 1, False),
