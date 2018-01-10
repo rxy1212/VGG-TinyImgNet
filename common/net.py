@@ -15,7 +15,7 @@ class VGGNet(nn.Module):
         self.conv1 = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, stride=1, padding=1, dilation=1, groups=1, bias=False),
             nn.ReLU(),
-            nn.BatchNorm2d(num_features=64, momentum=0.9, affine=False),
+            nn.BatchNorm2d(num_features=32, momentum=0.9, affine=False),
             nn.Conv2d(32, 64, 3, 1, 1, 1, 1, False),
             nn.ReLU(),
             nn.BatchNorm2d(num_features=64, momentum=0.9, affine=False),
