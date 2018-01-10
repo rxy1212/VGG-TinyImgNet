@@ -11,7 +11,6 @@ import os
 from os.path import abspath
 from os.path import join as pjoin
 from PIL import Image
-import torch
 import torch.utils.data as data
 import torchvision.transforms as transforms
 
