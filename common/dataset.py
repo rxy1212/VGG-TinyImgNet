@@ -30,6 +30,7 @@ class TIN200Data(data.Dataset):
     def __init__(self, root, label_map, data_dir='train',
                  loader=None, transform=transforms.ToTensor()):
         assert data_dir in ('train', 'val', 'test'), "data_dir must be 'train', 'val' or 'test'"
+        self.root = pjoin(root, 'tiny-imagenet-200')
         self.imgs = []
         self.labels = []
         self.data_dir = data_dir
@@ -42,25 +43,25 @@ class TIN200Data(data.Dataset):
             self.label_map = {classid: index for index, classid in enumerate(content)}
 
         if data_dir == 'train':
-            for path, _, files in os.walk(pjoin(root, 'train')):
+            for path, _, files in os.walk(pjoin(self.root, 'train')):
                 if len(files) == 500:
                     self.imgs += [abspath(pjoin(path, f)) for f in files]
                     self.labels += [f.split('_')[0] for f in files]
             self.labels = [self.label_map[label] for label in self.labels]
 
         elif data_dir == 'val':
-            with open(pjoin(root, 'val', 'val_annotations.txt')) as f:
+            with open(pjoin(self.root, 'val', 'val_annotations.txt')) as f:
                 name_map = [x.strip() for x in f.readlines()]
                 name_map = [x.split('\t')[:2] for x in name_map]
                 name_map = dict(name_map)
 
-            for path, _, files in os.walk(pjoin(root, 'val')):
+            for path, _, files in os.walk(pjoin(self.root, 'val')):
                 if len(files) > 1:
                     self.imgs += [abspath(pjoin(path, f)) for f in files]
                     self.labels += [self.label_map[name_map[f]] for f in files]
 
         else:
-            for path, _, files in os.walk(pjoin(root, 'test')):
+            for path, _, files in os.walk(pjoin(self.root, 'test')):
                 # how to check a sequence(list, tuple, dict) is empty or not with a pythonic way
                 # https://stackoverflow.com/questions/43121340/why-is-the-use-of-lensequence-in-condition-values-considered-incorrect-by-pyli
                 if files:
