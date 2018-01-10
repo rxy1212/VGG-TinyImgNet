@@ -105,12 +105,12 @@ def main():
     # test_datasets = TIN200Data(
     #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
 
-    train_loader = data.DataLoader(train_datasets, batch_size=128, shuffle=True, num_workers=2)
-    val_loader = data.DataLoader(val_datasets, batch_size=128, shuffle=True, num_workers=2)
+    train_loader = data.DataLoader(train_datasets, batch_size=256, shuffle=True, num_workers=2)
+    val_loader = data.DataLoader(val_datasets, batch_size=256, shuffle=True, num_workers=2)
 
     net = VGGNet().cuda()
 
-    optimizer = optim.Adam(params=net.parameters(), lr=1e-2)
+    optimizer = optim.Adam(params=net.parameters(), lr=0.007)
     loss_fn = nn.CrossEntropyLoss()
 
     train(net, loss_fn, optimizer, num_epochs=1, loader=train_loader)
