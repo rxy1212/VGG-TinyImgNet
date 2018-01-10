@@ -66,8 +66,6 @@ class VGGNet(nn.Module):
 
         self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        self.flatten = lambda x: x.view(x.size(0), -1)
-
         self.fcn = nn.Sequential(
             nn.Linear(512 * 8 * 8, 4096),
             nn.ReLU(),
@@ -87,6 +85,6 @@ class VGGNet(nn.Module):
         x = self.conv3(x)
         x = self.conv4(x)
         x = self.pool3(x)
-        x = self.flatten(x)
+        x = x.view(x.size(0), -1)
         x = self.fcn(x)
         return x
