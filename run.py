@@ -108,7 +108,7 @@ def main():
     train_loader = data.DataLoader(train_datasets, batch_size=64, shuffle=True, num_workers=2)
     val_loader = data.DataLoader(val_datasets, batch_size=64, shuffle=True, num_workers=2)
 
-    net = VGGNet().net()
+    net = VGGNet().cuda()
 
     optimizer = optim.Adam(params=net.parameters(), lr=1e-2)
     loss_fn = nn.CrossEntropyLoss()
