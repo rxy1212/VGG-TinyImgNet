@@ -13,7 +13,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data as data
 from torch.autograd import Variable
-#from common.net import VGGNet
+from common.net import VGGNet
 from common.densenet import DenseNet
 from common.dataset import TIN200Data
 from common.utils import localtime, save
@@ -98,7 +98,7 @@ def predict(model, loader):
 
 
 def main():
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "3"
     torch.cuda.is_available()
 
     train_datasets = TIN200Data(
@@ -108,16 +108,16 @@ def main():
     # test_datasets = TIN200Data(
     #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
 
-    train_loader = data.DataLoader(train_datasets, batch_size=12, shuffle=True, num_workers=1)
-    val_loader = data.DataLoader(val_datasets, batch_size=12, shuffle=True, num_workers=1)
+    train_loader = data.DataLoader(train_datasets, batch_size=12, shuffle=True, num_workers=4)
+    val_loader = data.DataLoader(val_datasets, batch_size=12, shuffle=True, num_workers=4)
 
-    #net = VGGNet()
+    net = VGGNet()
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
-    net = DenseNet(12,40,12,200,4)
+    #net = DenseNet(12,40,12,200,4)
     net.cuda()
-    optimizer = optim.Adam(params=net.parameters(), lr=5e-5)
+    optimizer = optim.Adam(params=net.parameters(), lr=5e-3)
     loss_fn = nn.CrossEntropyLoss()
 
     train(net, loss_fn, optimizer, num_epochs=3, loader=train_loader)
