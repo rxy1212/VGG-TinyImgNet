@@ -117,7 +117,7 @@ def main():
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(12,40,12,200,4)
     net.cuda()
-    optimizer = optim.SGD(params=net.parameters(), lr=0.1, momentum=0.99, weight_decay= 5e-4, nesterov=True)
+    optimizer = optim.SGD(params=net.parameters(), lr=5.5e-3, momentum=0.99, weight_decay= 5e-4, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
     train(net, loss_fn, optimizer, num_epochs=15, loader=train_loader)
