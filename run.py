@@ -116,14 +116,14 @@ def main():
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
-    net = DenseNet(64,25,0.6,200,64)
+    net = DenseNet(64,16,0.6,200,64)
     #net.cuda()
     if use_cuda:
         net.cuda()
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
-    optimizer = optim.SGD(params=net.parameters(), lr=5.5e-3, momentum=0.99, weight_decay= 5e-3, nesterov=True)
+    optimizer = optim.SGD(params=net.parameters(), lr=2e-3, momentum=0.99, weight_decay= 5e-2, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
     train(net, loss_fn, optimizer, num_epochs=15, loader=train_loader)
