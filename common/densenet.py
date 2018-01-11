@@ -89,8 +89,12 @@ class DenseNet(nn.Module):
             nChannels, growthRate, nDenseBlocks, bottleneck)
         nChannels += nDenseBlocks * growthRate
 
+        
         self.bn1 = nn.BatchNorm2d(nChannels)
-        self.fc = nn.Linear(nChannels, nClasses)
+        #self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2, dilation=1)
+
+        self.flatten = lambda x: x.view(x.size(0), -1)
+        self.fc = nn.Linear(8*8*nChannels, nClasses)
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -117,6 +121,7 @@ class DenseNet(nn.Module):
         out = self.trans1(self.dense1(out))
         out = self.trans2(self.dense2(out))
         out = self.dense3(out)
-        out = torch.squeeze(F.avg_pool2d(F.relu(self.bn1(out)), 8))
+        out = torch.squeeze(F.avg_pool2d(F.relu(self.bn1(out)), 2))
+        out = self.flatten(out)
         out = F.log_softmax(self.fc(out))
         return out

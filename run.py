@@ -18,6 +18,7 @@ from common.densenet import DenseNet
 from common.dataset import TIN200Data
 from common.utils import localtime, save
 import torchvision.models as models
+import torch.backends.cudnn as cudnn
 
 
 def train(model, loss_fn, optimizer, num_epochs=1, loader=None):
@@ -98,9 +99,9 @@ def predict(model, loader):
 
 
 def main():
-    os.environ["CUDA_VISIBLE_DEVICES"] = "2"
-    torch.cuda.is_available()
-
+    #os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+    use_cuda = torch.cuda.is_available()
+    
     train_datasets = TIN200Data(
         '/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt')
     val_datasets = TIN200Data('/data1/tiny-imagenet-200',
@@ -111,12 +112,17 @@ def main():
     train_loader = data.DataLoader(train_datasets, batch_size=64, shuffle=True, num_workers=4)
     val_loader = data.DataLoader(val_datasets, batch_size=64, shuffle=True, num_workers=4)
 
-    net = VGGNet()
+    #net = VGGNet()
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
-    #net = DenseNet(12,40,12,200,4)
-    net.cuda()
+    net = DenseNet(32,16,0.5,200,64)
+    #net.cuda()
+    if use_cuda:
+        net.cuda()
+        net = torch.nn.DataParallel(
+            net, device_ids=range(torch.cuda.device_count()))
+        cudnn.benchmark = True
     optimizer = optim.SGD(params=net.parameters(), lr=5.5e-3, momentum=0.99, weight_decay= 1e-3, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
