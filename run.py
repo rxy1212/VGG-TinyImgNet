@@ -21,7 +21,7 @@ import torchvision.models as models
 import torch.backends.cudnn as cudnn
 
 
-def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader):
+def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = None):
     num_correct = 0
     num_samples = 0
     for epoch in range(num_epochs):
