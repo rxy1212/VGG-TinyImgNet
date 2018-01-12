@@ -131,7 +131,7 @@ def main():
     train(net, loss_fn, optimizer, num_epochs=30, loader=train_loader)
     check_accuracy(net, val_loader)
 
-    save(net,False)
+    save(net)
 
 if __name__ == '__main__':
     main()
