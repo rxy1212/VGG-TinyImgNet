@@ -116,7 +116,7 @@ def main():
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
-    net = DenseNet(128,16,0.5,200,64)
+    net = DenseNet(64,16,0.5,200,64)
     #net.cuda()
     if use_cuda:
         net.cuda()
@@ -124,7 +124,7 @@ def main():
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
     #optimizer = optim.SGD(params=net.parameters(), lr=7e-3, momentum=0.99, weight_decay= 5e-5, nesterov=True)
-    optimizer = optim.Adam(params=net.parameters(), lr=5e-4, weight_decay = 7e-3)
+    optimizer = optim.Adam(params=net.parameters(), lr=5e-4, weight_decay = 1e-3)
 
     loss_fn = nn.CrossEntropyLoss()
 
