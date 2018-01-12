@@ -56,7 +56,7 @@ def check_accuracy(net, loader):
         # reference https://pytorch-cn.readthedocs.io/zh/latest/notes/autograd/
         x_var = Variable(x, volatile=True)
 
-        scores = net(x_var.type(torch.cuda.FloatTensor))
+        scores = net(x_var.cuda())
         _, preds = scores.data.cpu().max(1)
         num_correct += (preds == y).sum()
         num_samples += preds.size(0)

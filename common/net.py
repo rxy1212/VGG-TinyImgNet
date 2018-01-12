@@ -132,5 +132,3 @@ class VGG11(nn.Module):
                     layers += [conv2d, nn.ReLU(inplace=True)]
                 in_channels = v
         return nn.Sequential(*layers)
-
-print(VGG11())
