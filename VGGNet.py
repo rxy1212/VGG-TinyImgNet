@@ -108,7 +108,7 @@ class Test_Model(nn.Module):
 
 
 
-def train(model, loss_fn, optimizer, num_epochs = 1, loader=None):
+def train(model, loss_fn, optimizer, num_epochs = 1, loader=None, val_loader=None):
     num_correct = 0
     num_samples = 0
     for epoch in range(num_epochs):
@@ -131,23 +131,24 @@ def train(model, loss_fn, optimizer, num_epochs = 1, loader=None):
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-
+        check_accuracy(model, val_loader)
+        
 def check_accuracy(model, loader):
 
     print('Checking accuracy on validation set')
   
-    num_correct = 0
-    num_samples = 0
+    val_correct = 0
+    val_samples = 0
     model.eval()               # Put the model in test mode (the opposite of model.train(), essentially)
     for x, y in loader:
         x_var = Variable(x.cuda())
 
         scores = model(x_var)
         _, preds = scores.data.cpu().max(1)
-        num_correct += (preds == y).sum()
-        num_samples += preds.size(0)
-        acc = float(num_correct) / num_samples
-    print('Got %d / %d correct (%.2f)' % (num_correct, num_samples, 100 * acc))
+        val_correct += (preds == y).sum()
+        val_samples += preds.size(0)
+        acc = float(val_correct) / val_samples
+    print('Got %d / %d correct (%.2f)' % (val_correct, val_samples, 100 * acc))
 
 
 def main():
@@ -170,8 +171,7 @@ def main():
     optimizer = optim.SGD(params=model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(model, loss_fn, optimizer, num_epochs = 30, loader=train_loader)
-    check_accuracy(model, val_loader)
+    train(model, loss_fn, optimizer, num_epochs = 30, loader=train_loader, val_loader=val_loader)
     torch.save(model.state_dict(),'./10_net_params/net_params.pkl')
 
   
