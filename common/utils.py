@@ -24,9 +24,10 @@ def save(net, state_dict=False, replace=False):
     '''
     if replace:
         if state_dict:
-            torch.save(net.state_dict(), f'./saved_nets/best_state.pkl')
+            torch.save(net.state_dict(),
+                       f'./saved_nets/best_state_{localtime()}.pkl')
         else:
-            torch.save(net, f'./saved_nets/best.pkl')
+            torch.save(net, f'./saved_nets/best_{localtime()}.pkl')
     else:
         if state_dict:
             torch.save(net.state_dict(),
