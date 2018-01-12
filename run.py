@@ -42,7 +42,7 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None):
             num_samples += preds.size(0)
             acc = float(num_correct) / num_samples
             if (t + 1) % 20 == 0:
-                print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.4f}')        
+                print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.4f}')
 
 
 def check_accuracy(net, loader):
