@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 import torchvision.transforms as T
 from torchvision import models
+import torch.backends.cudnn as cudnn
 from common.dataset import TIN200Data
 
 gpu_type = torch.cuda.FloatTensor
@@ -17,6 +18,7 @@ class Flatten(nn.Module):
     def forward(self, x):
         N, C, H, W = x.size()
         return x.view(N, -1)
+
 
 class Model(nn.Module):
     def __init__(self):
@@ -156,19 +158,21 @@ def main():
     train_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='train')
     val_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='val')
 
-    train_loader = DataLoader(train_data, batch_size=64, shuffle=True, num_workers=2)
-    val_loader = DataLoader(val_data, batch_size=64, shuffle=True, num_workers=2)
+    train_loader = DataLoader(train_data, batch_size=128, shuffle=True, num_workers=2)
+    val_loader = DataLoader(val_data, batch_size=128, shuffle=True, num_workers=2)
 
-    model = models.vgg11().cuda()
-    # model = Model().cuda()
-    model = Test_Model().cuda()
-    model.load_state_dict(torch.load('./net_params/net_params6.pkl'))
-    optimizer = optim.SGD(params=model.parameters(), lr=0.005, momentum=0.9, weight_decay=1e-06, nesterov=True)
+    # model = models.vgg11().cuda()
+    model = Model().cuda()
+    cudnn.benchmark = True
+    # model = Test_Model().cuda()
+
+    model.load_state_dict(torch.load('./9_net_params/net_params.pkl'))
+    optimizer = optim.SGD(params=model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(model, loss_fn, optimizer, num_epochs = 20, loader=train_loader)
+    train(model, loss_fn, optimizer, num_epochs = 30, loader=train_loader)
     check_accuracy(model, val_loader)
-    torch.save(model.state_dict(),'./net_params/net_params7.pkl')
+    torch.save(model.state_dict(),'./10_net_params/net_params.pkl')
 
   
 
