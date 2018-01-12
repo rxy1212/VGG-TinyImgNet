@@ -50,6 +50,9 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
             best_acc = acc
             print(f'Got current best_acc:{best_acc:.2f}%, Saving...')
             save(net, False, True)
+    print('-------------------------------')
+    print(f'{best_acc:.2f}%')
+    print('-------------------------------')
 
 
 def check_accuracy(net, loader):
