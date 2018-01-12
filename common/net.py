@@ -101,7 +101,7 @@ CONF = {
 class VGG11(nn.Module):
     def __init__(self):
         super(VGG11, self).__init__()
-        self.features = self._make_layers(CONF['A'])
+        self.features = self._make_layers(CONF['A'], True)
         self.classifier = nn.Sequential(
             nn.Linear(512*8*8, 4096),
             nn.ReLU(),
@@ -132,3 +132,5 @@ class VGG11(nn.Module):
                     layers += [conv2d, nn.ReLU(inplace=True)]
                 in_channels = v
         return nn.Sequential(*layers)
+
+print(VGG11())
