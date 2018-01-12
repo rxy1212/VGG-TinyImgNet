@@ -124,14 +124,14 @@ def main():
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
     #optimizer = optim.SGD(params=net.parameters(), lr=7e-3, momentum=0.99, weight_decay= 5e-5, nesterov=True)
-    optimizer = optim.Adam(params=net.parameters(), lr=5e-4, weight_decay = 1e-3)
+    optimizer = optim.Adam(params=net.parameters(), lr=7e-4, weight_decay = 1e-3)
 
     loss_fn = nn.CrossEntropyLoss()
 
     train(net, loss_fn, optimizer, num_epochs=15, loader=train_loader)
     check_accuracy(net, val_loader)
 
-    save(net)
+    save(net,False)
 
 if __name__ == '__main__':
     main()
