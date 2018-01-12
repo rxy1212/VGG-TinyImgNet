@@ -23,7 +23,6 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
     num_correct = 0
     num_samples = 0
     best_acc = 0
-    acc = 0
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         net.train()
@@ -49,6 +48,7 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
         acc = check_accuracy(net, val_loader)
         if acc > best_acc:
             best_acc = acc
+            print(f'Get current best_acc:{best_acc:.2f}%, Saving...')
             save(net, False, True)
 
 
