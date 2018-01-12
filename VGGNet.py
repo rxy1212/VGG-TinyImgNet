@@ -60,14 +60,18 @@ class Model(nn.Module):
                         nn.MaxPool2d(kernel_size=2, stride=2),
                         )
         self.fc = nn.Sequential(
-                        Flatten(),
-                        nn.Linear(8*8*512, 2048),
+                        Flatten(), 
+                        nn.Linear(8*8*512, 4096),
+                        nn.ReLU(),
+                        nn.Dropout2d(p=0.5, inplace=True), 
+                        nn.Linear(4096, 1024), 
+                        nn.ReLU(),
                         nn.Dropout2d(p=0.5, inplace=True),
-                        nn.Linear(2048, 1024),
-                        nn.Dropout2d(p=0.5, inplace=True),
-                        nn.Linear(1024, 200),
-                        nn.Softmax(),
-                        )
+                        nn.Linear(1024, 1024), 
+                        nn.Linear(1024, 512),
+                        nn.Linear(512, 200),
+                        nn.Softmax(), 
+                        )               
 
     def forward(self, x):
         x = self.conv1(x)
@@ -167,12 +171,12 @@ def main():
     cudnn.benchmark = True
     # model = Test_Model().cuda()
 
-    model.load_state_dict(torch.load('./10_net_params/net_params.pkl'))
+    model.load_state_dict(torch.load('./net_params/10_net_params.pkl'))
     optimizer = optim.SGD(params=model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
     train(model, loss_fn, optimizer, num_epochs = 30, loader=train_loader, val_loader=val_loader)
-    torch.save(model.state_dict(),'./11_net_params/net_params.pkl')
+    torch.save(model.state_dict(),'./net_params/11_net_params.pkl')
 
   
 
