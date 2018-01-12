@@ -18,7 +18,7 @@ from common.dataset import TIN200Data
 from common.utils import localtime, save
 
 
-def train(net, loss_fn, optimizer, num_epochs=100, loader=None):
+def train(net, loss_fn, optimizer, num_epochs=1, loader=None):
     num_correct = 0
     num_samples = 0
     for epoch in range(num_epochs):
@@ -107,7 +107,7 @@ def main():
 
     net = VGG11().cuda()
 
-    optimizer = optim.SGD(net.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
+    optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
     loss_fn = nn.CrossEntropyLoss()
 
     train(net, loss_fn, optimizer, num_epochs=1, loader=train_loader)
