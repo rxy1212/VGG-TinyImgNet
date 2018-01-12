@@ -19,9 +19,11 @@ from common.dataset import TIN200Data
 from common.utils import localtime, save
 
 
-def train(net, loss_fn, optimizer, num_epochs=1, loader=None):
+def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
     num_correct = 0
     num_samples = 0
+    best_acc = 0
+    acc = 0
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         net.train()
@@ -44,6 +46,11 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None):
             if (t + 1) % 20 == 0:
                 print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.2f}%')
 
+        acc = check_accuracy(net, val_loader)
+        if acc > best_acc:
+            best_acc = acc
+            save(net, False, True)
+
 
 def check_accuracy(net, loader):
     print('Checking accuracy on validation set')
@@ -62,6 +69,7 @@ def check_accuracy(net, loader):
         num_samples += preds.size(0)
     acc = 100.0 * float(num_correct) / num_samples
     print(f'Got {num_correct} / {num_samples} correct ({acc:.2f}%)')
+    return acc
 
 
 def predict(net, loader):
@@ -112,10 +120,7 @@ def main():
     optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader)
-    check_accuracy(net, val_loader)
-
-    save(net, False)
+    train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader, val_loader=val_loader)
 
 if __name__ == '__main__':
     main()
