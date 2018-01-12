@@ -13,24 +13,27 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data as data
 from torch.autograd import Variable
-from common.net import VGGNet
+from common.net import VGG11
 from common.dataset import TIN200Data
 from common.utils import localtime, save
 
 
-def train(net, loss_fn, optimizer, num_epochs=1, loader=None):
+def train(net, loss_fn, optimizer, num_epochs=100, loader=None):
     num_correct = 0
     num_samples = 0
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         net.train()
         for t, (x, y) in enumerate(loader):
+            optimizer.zero_grad()
             x_train = Variable(x.cuda())
             y_train = Variable(y.cuda())
 
             scores = net(x_train)
             loss = loss_fn(scores, y_train)
 
+            loss.backward()
+            optimizer.step()
             # reference https://discuss.pytorch.org/t/argmax-with-pytorch/1528
             _, preds = scores.data.cpu().max(1)
 
@@ -38,11 +41,7 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None):
             num_samples += preds.size(0)
             acc = float(num_correct) / num_samples
             if (t + 1) % 20 == 0:
-                print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.4f}')
-
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+                print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.4f}')        
 
 
 def check_accuracy(net, loader):
@@ -108,9 +107,9 @@ def main():
     train_loader = data.DataLoader(train_datasets, batch_size=256, shuffle=True, num_workers=2)
     val_loader = data.DataLoader(val_datasets, batch_size=256, shuffle=True, num_workers=2)
 
-    net = VGGNet().cuda()
+    net = VGG11().cuda()
 
-    optimizer = optim.Adam(params=net.parameters(), lr=0.007)
+    optimizer = optim.SGD(net.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
     loss_fn = nn.CrossEntropyLoss()
 
     train(net, loss_fn, optimizer, num_epochs=1, loader=train_loader)
