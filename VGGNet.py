@@ -132,7 +132,7 @@ def train(model, loss_fn, optimizer, num_epochs = 1, loader=None, val_loader=Non
             loss.backward()
             optimizer.step()
         check_accuracy(model, val_loader)
-        
+
 def check_accuracy(model, loader):
 
     print('Checking accuracy on validation set')
@@ -167,12 +167,12 @@ def main():
     cudnn.benchmark = True
     # model = Test_Model().cuda()
 
-    model.load_state_dict(torch.load('./9_net_params/net_params.pkl'))
+    model.load_state_dict(torch.load('./10_net_params/net_params.pkl'))
     optimizer = optim.SGD(params=model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
     train(model, loss_fn, optimizer, num_epochs = 30, loader=train_loader, val_loader=val_loader)
-    torch.save(model.state_dict(),'./10_net_params/net_params.pkl')
+    torch.save(model.state_dict(),'./11_net_params/net_params.pkl')
 
   
 
