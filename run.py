@@ -60,8 +60,8 @@ def check_accuracy(net, loader):
         _, preds = scores.data.cpu().max(1)
         num_correct += (preds == y).sum()
         num_samples += preds.size(0)
-    acc = float(num_correct) / num_samples
-    print(f'Got {num_correct} / {num_samples} correct ({100 * acc:.2f}%)')
+    acc = 100.0 * float(num_correct) / num_samples
+    print(f'Got {num_correct} / {num_samples} correct ({acc:.2f}%)')
 
 
 def predict(net, loader):
@@ -112,7 +112,7 @@ def main():
     optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(net, loss_fn, optimizer, num_epochs=1, loader=train_loader)
+    train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader)
     check_accuracy(net, val_loader)
 
     save(net, False)
