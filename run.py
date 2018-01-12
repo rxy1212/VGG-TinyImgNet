@@ -16,7 +16,7 @@ from torch.autograd import Variable
 import torch.backends.cudnn as cudnn
 from common.net import VGG11
 from common.dataset import TIN200Data
-from common.utils import localtime, save
+from common.utils import check_accuracy, localtime, save
 
 
 def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
@@ -53,26 +53,6 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
     print('-------------------------------')
     print(f'{best_acc:.2f}%')
     print('-------------------------------')
-
-
-def check_accuracy(net, loader):
-    print('Checking accuracy on validation set')
-
-    num_correct = 0
-    num_samples = 0
-    # Put the net in test mode (the opposite of net.train(), essentially)
-    net.eval()
-    for x, y in loader:
-        # reference https://pytorch-cn.readthedocs.io/zh/latest/notes/autograd/
-        x_var = Variable(x, volatile=True)
-
-        scores = net(x_var.cuda())
-        _, preds = scores.data.cpu().max(1)
-        num_correct += (preds == y).sum()
-        num_samples += preds.size(0)
-    acc = 100.0 * float(num_correct) / num_samples
-    print(f'Got {num_correct} / {num_samples} correct ({acc:.2f}%)')
-    return acc
 
 
 def predict(net, loader):
