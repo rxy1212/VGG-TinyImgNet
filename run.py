@@ -24,6 +24,8 @@ import torch.backends.cudnn as cudnn
 def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = None):
     num_correct = 0
     num_samples = 0
+    best_acc = 0
+    acc = 0
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         model.train()
@@ -48,6 +50,11 @@ def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = Non
             loss.backward()
             optimizer.step()
         check_accuracy(model,val_loader)
+        if acc > best_acc:
+            best_acc = acc
+            save(model, True, True)
+    print("The best accuracy:",best_acc)
+
 
 
 def check_accuracy(model, loader):
@@ -103,10 +110,9 @@ def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = "2,3"
     use_cuda = torch.cuda.is_available()
     
-    train_datasets = TIN200Data(
-        '/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt')
-    val_datasets = TIN200Data('/data1/tiny-imagenet-200',
-                              '/data1/tiny-imagenet-200/wnids.txt', 'val')
+    train_datasets = TIN200Data('/data1')
+    val_datasets = TIN200Data('/data1', 'val')
+
     # test_datasets = TIN200Data(
     #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
 
@@ -125,14 +131,14 @@ def main():
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
     #optimizer = optim.SGD(params=net.parameters(), lr=7e-3, momentum=0.99, weight_decay= 5e-5, nesterov=True)
-    optimizer = optim.Adam(params=net.parameters(), lr=7e-4, weight_decay = 1e-3)
+    optimizer = optim.Adam(params=net.parameters(), lr=5e-4, weight_decay = 5e-5)
 
     loss_fn = nn.CrossEntropyLoss()
 
     train(net, loss_fn, optimizer, num_epochs=30, loader=train_loader,val_loader = val_loader)
     #check_accuracy(net, val_loader)
 
-    save(net)
+    #save(net)
 
 if __name__ == '__main__':
     main()
