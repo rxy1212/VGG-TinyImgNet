@@ -97,10 +97,8 @@ def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     torch.cuda.is_available()
 
-    train_datasets = TIN200Data(
-        '/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt')
-    val_datasets = TIN200Data('/data1/tiny-imagenet-200',
-                              '/data1/tiny-imagenet-200/wnids.txt', 'val')
+    train_datasets = TIN200Data('/data1')
+    val_datasets = TIN200Data('/data1', 'val')
     # test_datasets = TIN200Data(
     #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
 
