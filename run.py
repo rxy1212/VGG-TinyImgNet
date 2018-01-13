@@ -14,7 +14,7 @@ import torch.optim as optim
 import torch.utils.data as data
 from torch.autograd import Variable
 import torch.backends.cudnn as cudnn
-from common.net import VGGNet
+from common.net import VGG
 from common.dataset import TIN200Data
 from common.utils import *
 
@@ -46,7 +46,7 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
                 print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.2f}%')
 
         acc = check_accuracy(net, val_loader)
-        print(f'last best_acc:{best_acc:.2f}')
+        print(f'last best_acc:{best_acc:.2f}%')
         if acc > best_acc:
             best_acc = acc
             print(f'Got current best_acc:{best_acc:.2f}%, Saving...')
@@ -98,13 +98,13 @@ def main(flag=True):
         train_loader = data.DataLoader(train_datasets, batch_size=256, shuffle=True, num_workers=4)
         val_loader = data.DataLoader(val_datasets, batch_size=256, num_workers=4)
 
-        net = VGGNet().cuda()
+        net = VGG().cuda()
         cudnn.benchmark = True
 
         optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
         loss_fn = nn.CrossEntropyLoss()
 
-        train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader, val_loader=val_loader)
+        train(net, loss_fn, optimizer, num_epochs=50, loader=train_loader, val_loader=val_loader)
     else:
         os.environ["CUDA_VISIBLE_DEVICES"] = "0"
         torch.cuda.is_available()
