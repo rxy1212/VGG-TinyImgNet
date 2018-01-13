@@ -8,6 +8,7 @@
 '''
 
 import time
+from os.path import join as pjoin
 import torch
 from torch.autograd import Variable
 
@@ -34,19 +35,20 @@ def save(net, state_dict=False, replace=False):
             torch.save(net, f'./saved_nets/net_{localtime()}.pkl')
 
 
-def restore(pkl_path, model_class=None):
+def restore(pkl, model_class=None):
     '''
     Restore a network
     '''
+    base_path = './saved_nets'
     if model_class != None:
         try:
             model = model_class()
-            return model.load_state_dict(torch.load(pkl_path))
+            return model.load_state_dict(torch.load(pjoin(base_path, pkl)))
         except:
             raise ValueError('model_class must match with the model you want to restore')
 
     else:
-        return torch.load(pkl_path)
+        return torch.load(pjoin(base_path, pkl))
 
 
 def check_accuracy(net, loader):

@@ -16,7 +16,7 @@ from torch.autograd import Variable
 import torch.backends.cudnn as cudnn
 from common.net import VGG11
 from common.dataset import TIN200Data
-from common.utils import check_accuracy, localtime, save
+from common.utils import *
 
 
 def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
@@ -85,25 +85,31 @@ def predict(net, loader):
             f.write(f'{test_img_name[i]} {classid[i]}\n')
 
 
-def main():
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-    torch.cuda.is_available()
+def main(flag=True):
+    if flag:
+        os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+        torch.cuda.is_available()
 
-    train_datasets = TIN200Data('/data1')
-    val_datasets = TIN200Data('/data1', 'val')
-    # test_datasets = TIN200Data(
-    #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
+        train_datasets = TIN200Data('/data1')
+        val_datasets = TIN200Data('/data1', 'val')
 
-    train_loader = data.DataLoader(train_datasets, batch_size=256, shuffle=True, num_workers=4)
-    val_loader = data.DataLoader(val_datasets, batch_size=256, shuffle=True, num_workers=4)
+        train_loader = data.DataLoader(train_datasets, batch_size=256, shuffle=True, num_workers=4)
+        val_loader = data.DataLoader(val_datasets, batch_size=256, num_workers=4)
 
-    net = VGG11().cuda()
-    cudnn.benchmark = True
+        net = VGG11().cuda()
+        cudnn.benchmark = True
 
-    optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
-    loss_fn = nn.CrossEntropyLoss()
+        optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
+        loss_fn = nn.CrossEntropyLoss()
 
-    train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader, val_loader=val_loader)
+        train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader, val_loader=val_loader)
+    else:
+        os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+        torch.cuda.is_available()
+        test_datasets = TIN200Data('/data1', 'test')
+        test_loader = data.DataLoader(test_datasets, batch_sampler=256, num_workers=4)
+        net = restore('best.pkl')
+        predict(net, test_loader)
 
 if __name__ == '__main__':
-    main()
+    main(False)
