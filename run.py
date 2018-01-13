@@ -82,7 +82,8 @@ def predict(net, loader):
     with open(pjoin(os.getcwd(), 'predictions', f'{localtime()}.txt'), 'w') as f:
         for i in range(len(classid)):
             f.write(f'{test_img_name[i]} {classid[i]}\n')
-            print(f'process:{i+1}/{len(classid)}')
+            if (i + 1) % 500 == 0:
+                print(f'process:{i+1}/{len(classid)}')
 
 
 def main(flag=True):
