@@ -79,8 +79,7 @@ def predict(net, loader):
         _, preds = scores.data.cpu().max(1)
         classid += [classid_map[p] for p in preds]
 
-
-    with open(pjoin(os.getcwd(), 'predictions', localtime(), '.txt'), 'w') as f:
+    with open(pjoin(os.getcwd(), 'predictions', f'{localtime()}.txt'), 'w') as f:
         for i in len(classid):
             f.write(f'{test_img_name[i]} {classid[i]}\n')
 
