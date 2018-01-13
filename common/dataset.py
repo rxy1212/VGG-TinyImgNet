@@ -43,14 +43,14 @@ class TIN200Data(data.Dataset):
             # map string classid to 0-199 interger label
             self.label_map = {classid: index for index, classid in enumerate(content)}
 
-        if data_dir == 'train':
+        if self.data_dir == 'train':
             for path, _, files in os.walk(pjoin(self.root, 'train')):
                 if len(files) == 500:
                     self.imgs += [abspath(pjoin(path, f)) for f in files]
                     self.labels += [f.split('_')[0] for f in files]
             self.labels = [self.label_map[label] for label in self.labels]
 
-        elif data_dir == 'val':
+        elif self.data_dir == 'val':
             with open(pjoin(self.root, 'val', 'val_annotations.txt')) as f:
                 name_map = [x.strip() for x in f.readlines()]
                 name_map = [x.split('\t')[:2] for x in name_map]
@@ -60,7 +60,6 @@ class TIN200Data(data.Dataset):
                 if len(files) > 1:
                     self.imgs += [abspath(pjoin(path, f)) for f in files]
                     self.labels += [self.label_map[name_map[f]] for f in files]
-
         else:
             for path, _, files in os.walk(pjoin(self.root, 'test')):
                 # how to check a sequence(list, tuple, dict) is empty or not with a pythonic way

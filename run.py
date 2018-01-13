@@ -107,7 +107,7 @@ def main(flag=True):
         os.environ["CUDA_VISIBLE_DEVICES"] = "0"
         torch.cuda.is_available()
         test_datasets = TIN200Data('/data1', 'test')
-        test_loader = data.DataLoader(test_datasets, batch_sampler=256, num_workers=4)
+        test_loader = data.DataLoader(test_datasets, batch_size=256, num_workers=4)
         print('Load best net...')
         net = restore('best.pkl')
         print('Done. Predicting...')
