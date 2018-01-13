@@ -51,8 +51,8 @@ def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = Non
             loss.backward()
             optimizer.step()
         val_acc = check_accuracy(model,val_loader)
-        if acc > best_val_acc:
-            best_acc = acc
+        if val_acc > best_val_acc:
+            best_acc = val_acc
             print("saving net.....")
             save(model, True, True)
         print('-------------------------------')
