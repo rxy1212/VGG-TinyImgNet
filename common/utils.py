@@ -25,9 +25,9 @@ def save(net, state_dict=False, replace=False):
     '''
     if replace:
         if state_dict:
-            torch.save(net.state_dict(), f'./saved_nets/best_vgg16_state.pkl')
+            torch.save(net.state_dict(), f'./saved_nets/best_vgg19_state.pkl')
         else:
-            torch.save(net, f'./saved_nets/best_vgg16.pkl')
+            torch.save(net, f'./saved_nets/best_vgg19.pkl')
     else:
         if state_dict:
             torch.save(net.state_dict(), f'./saved_nets/net_state_{localtime()}.pkl')

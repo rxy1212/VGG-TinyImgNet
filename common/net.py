@@ -104,7 +104,7 @@ CONF = {
 class VGG(nn.Module):
     def __init__(self):
         super(VGG, self).__init__()
-        self.features = self._make_layers(CONF['D'], True)
+        self.features = self._make_layers(CONF['E'], True)
         self.classifier = nn.Sequential(
             nn.Linear(512*8*8, 4096),
             nn.ReLU(),

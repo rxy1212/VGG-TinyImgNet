@@ -46,6 +46,7 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
                 print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.2f}%')
 
         acc = check_accuracy(net, val_loader)
+        print(f'last best_acc:{best_acc:.2f}')
         if acc > best_acc:
             best_acc = acc
             print(f'Got current best_acc:{best_acc:.2f}%, Saving...')
