@@ -116,4 +116,4 @@ def main(flag=True):
         print('Done.')
 
 if __name__ == '__main__':
-    main(False)
+    main()
