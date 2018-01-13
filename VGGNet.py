@@ -8,9 +8,9 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 import torchvision.transforms as T
-from torchvision import models
 import torch.backends.cudnn as cudnn
 from common.dataset import TIN200Data
+from common.net import VGG_19
 
 gpu_type = torch.cuda.FloatTensor
 
@@ -100,10 +100,13 @@ class Test_Model(nn.Module):
                         nn.Dropout2d(p=0.25),
                         Flatten(),
                         nn.Linear(16*16*64, 4096),
+                        nn.Linear(4096, 2048),
+                        nn.Linear(2048, 1024),
                         nn.ReLU(),
                         nn.Dropout2d(p=0.5),
-                        nn.Linear(4096, 2048),
-                        nn.Linear(2048, 200),
+                        nn.Linear(1024, 512),
+                        nn.Linear(512, 512),
+                        nn.Linear(512, 200),
                         nn.Softmax(),
                     )
     def forward(self, x):
@@ -166,17 +169,17 @@ def main():
     train_loader = DataLoader(train_data, batch_size=128, shuffle=True, num_workers=2)
     val_loader = DataLoader(val_data, batch_size=128, shuffle=True, num_workers=2)
 
-    # model = models.vgg11().cuda()
-    model = Model().cuda()
+    # model = Model().cuda()
+    Model = VGG_19().cuda()
     cudnn.benchmark = True
     # model = Test_Model().cuda()
 
-    model.load_state_dict(torch.load('./net_params/10_net_params.pkl'))
-    optimizer = optim.SGD(params=model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-06, nesterov=True)
+    # model.load_state_dict(torch.load('./net_params/VGG19_net_params1.pkl'))
+    optimizer = optim.SGD(params=model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(model, loss_fn, optimizer, num_epochs = 30, loader=train_loader, val_loader=val_loader)
-    torch.save(model.state_dict(),'./net_params/11_net_params.pkl')
+    train(model, loss_fn, optimizer, num_epochs = 3, loader=train_loader, val_loader=val_loader)
+    torch.save(model.state_dict(),'./net_params/VGG19_net_params1.pkl')
 
   
 
