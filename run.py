@@ -53,7 +53,7 @@ def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = Non
         if acc > best_acc:
             best_acc = acc
             save(model, True, True)
-    print("The best accuracy:",best_acc)
+            print("The best accuracy:%.4f" % (100 * best_acc))
 
 
 
