@@ -52,11 +52,11 @@ def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = Non
             optimizer.step()
         val_acc = check_accuracy(model,val_loader)
         if val_acc > best_val_acc:
-            best_acc = val_acc
+            best_val_acc = val_acc
             print("saving net.....")
             save(model, True, True)
         print('-------------------------------')
-        print("The best validation accuracy:%.4f%%" % (100 * best_acc))
+        print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
         print('-------------------------------')
 
 
@@ -128,7 +128,7 @@ def main():
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
-    net = DenseNet(64,22,0.5,200,64)
+    net = DenseNet(64,28,0.5,200,64)
     #net.cuda()
     if use_cuda:
         net.cuda()
