@@ -77,7 +77,7 @@ def check_accuracy(model, loader):
         val_correct += (preds == y).sum()
         val_samples += preds.size(0)
     val_acc = float(val_correct) / val_samples
-    print('Got %d / %d correct (%.2f%%)' % (val_correct, val_samples, 100 * val_acc))
+    print('Got %d / %d correct (%.4f%%)' % (val_correct, val_samples, 100 * val_acc))
     return val_acc
 
 
