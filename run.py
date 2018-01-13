@@ -80,8 +80,9 @@ def predict(net, loader):
         classid += [classid_map[p] for p in preds]
 
     with open(pjoin(os.getcwd(), 'predictions', f'{localtime()}.txt'), 'w') as f:
-        for i in len(classid):
+        for i in range(len(classid)):
             f.write(f'{test_img_name[i]} {classid[i]}\n')
+            print(f'process:{i+1}/{len(classid)}')
 
 
 def main(flag=True):
