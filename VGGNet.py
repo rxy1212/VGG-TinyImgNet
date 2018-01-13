@@ -10,7 +10,7 @@ from torch.utils.data import sampler
 import torchvision.transforms as T
 import torch.backends.cudnn as cudnn
 from common.dataset import TIN200Data
-import common.net as net
+from common.net import Vgg19
 
 gpu_type = torch.cuda.FloatTensor
 
@@ -170,7 +170,7 @@ def main():
     val_loader = DataLoader(val_data, batch_size=128, shuffle=True, num_workers=2)
 
     # model = Model().cuda()
-    Model = net.VGG_19().cuda()
+    Model = Vgg19().cuda()
     cudnn.benchmark = True
     # model = Test_Model().cuda()
 

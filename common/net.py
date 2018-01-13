@@ -88,3 +88,82 @@ class VGGNet(nn.Module):
         x = self.flatten(x)
         x = self.fcn(x)
         return x
+
+class Vgg19(nn.Module):
+    def __init__(self):
+        super(VGG_19, self).__init__()
+        self.conv1 = nn.Sequential(
+                        nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.BatchNorm2d(64),
+                        nn.MaxPool2d(kernel_size=2, stride=2),
+                        )
+        self.conv2 = nn.Sequential(
+                        nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.BatchNorm2d(128),
+                        )
+        self.conv3 = nn.Sequential(
+                        nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.BatchNorm2d(256),
+                        nn.MaxPool2d(kernel_size=2, stride=2),
+                        )
+        self.conv4 = nn.Sequential(
+                        nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.BatchNorm2d(512),
+                        )
+        self.conv5 = nn.Sequential(
+                        nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+                        nn.ReLU(),
+                        nn.BatchNorm2d(512),
+                        nn.MaxPool2d(kernel_size=2, stride=2),
+                        )
+
+        self.flatten = lambda x: x.view(x.size(0), -1)
+
+        self.fc = nn.Sequential(
+                        nn.Linear(8*8*512, 4096),
+                        nn.ReLU(),
+                        nn.Linear(4096, 2048),
+                        nn.ReLU(),
+                        nn.Linear(2048, 2048),
+                        nn.ReLU(),
+                        nn.Linear(2048, 1024),
+                        nn.ReLU(),
+                        nn.Linear(1024, 200),
+                        nn.Softmax(),
+                        )
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = self.conv3(x)
+        x = self.conv4(x)
+        x = self.conv5(x)
+        x = self.flatten(x)
+        x = self.fc(x)
+        return x
