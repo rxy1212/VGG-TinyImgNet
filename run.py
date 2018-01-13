@@ -24,8 +24,9 @@ import torch.backends.cudnn as cudnn
 def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = None):
     num_correct = 0
     num_samples = 0
-    best_acc = 0
+    best_val_acc = 0
     acc = 0
+    val_acc = 0
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         model.train()
@@ -43,17 +44,20 @@ def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = Non
             num_samples += preds.size(0)
             acc = float(num_correct) / num_samples
             if (t + 1) % 20 == 0:
-                print('t = %d, loss = %.4f, acc = %.4f' %
-                      (t + 1, loss.data[0], acc))
+                print('t = %d, loss = %.4f, acc = %.4f%%' %
+                      (t + 1, loss.data[0], 100 * acc))
 
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-        check_accuracy(model,val_loader)
-        if acc > best_acc:
+        val_acc = check_accuracy(model,val_loader)
+        if acc > best_val_acc:
             best_acc = acc
+            print("saving net.....")
             save(model, True, True)
-            print("The best accuracy:%.4f" % (100 * best_acc))
+        print('-------------------------------')
+        print("The best accuracy:%.4f%%" % (100 * best_acc))
+        print('-------------------------------')
 
 
 
@@ -72,8 +76,9 @@ def check_accuracy(model, loader):
         _, preds = scores.data.cpu().max(1)
         val_correct += (preds == y).sum()
         val_samples += preds.size(0)
-    acc = float(val_correct) / val_samples
-    print('Got %d / %d correct (%.2f)' % (val_correct, val_samples, 100 * acc))
+    val_acc = float(val_correct) / val_samples
+    print('Got %d / %d correct (%.2f%%)' % (val_correct, val_samples, 100 * val_acc))
+    return val_acc
 
 
 def predict(model, loader):
