@@ -91,7 +91,7 @@ class VGGNet(nn.Module):
 
 class Vgg19(nn.Module):
     def __init__(self):
-        super(VGG_19, self).__init__()
+        super(Vgg19, self).__init__()
         self.conv1 = nn.Sequential(
                         nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
                         nn.ReLU(),
