@@ -56,7 +56,7 @@ def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = Non
             print("saving net.....")
             save(model, True, True)
         print('-------------------------------')
-        print("The best accuracy:%.4f%%" % (100 * best_acc))
+        print("The best validation accuracy:%.4f%%" % (100 * best_acc))
         print('-------------------------------')
 
 
@@ -136,7 +136,7 @@ def main():
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
     #optimizer = optim.SGD(params=net.parameters(), lr=7e-3, momentum=0.99, weight_decay= 5e-5, nesterov=True)
-    optimizer = optim.Adam(params=net.parameters(), lr=5e-4, weight_decay = 5e-3)
+    optimizer = optim.Adam(params=net.parameters(), lr=7e-3, weight_decay = 4e-3)
 
     loss_fn = nn.CrossEntropyLoss()
 
