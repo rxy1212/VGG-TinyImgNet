@@ -108,8 +108,11 @@ def main(flag=True):
         torch.cuda.is_available()
         test_datasets = TIN200Data('/data1', 'test')
         test_loader = data.DataLoader(test_datasets, batch_sampler=256, num_workers=4)
+        print('Load best net...')
         net = restore('best.pkl')
+        print('Done. Predicting...')
         predict(net, test_loader)
+        print('Done.')
 
 if __name__ == '__main__':
     main(False)
