@@ -170,7 +170,7 @@ def main():
     val_loader = DataLoader(val_data, batch_size=128, shuffle=True, num_workers=2)
 
     # model = Model().cuda()
-    Model = Vgg19().cuda()
+    Model = Vgg19().cuda()     # net model in the net.py
     cudnn.benchmark = True
     # model = Test_Model().cuda()
 
