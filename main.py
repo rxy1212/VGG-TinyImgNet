@@ -14,6 +14,7 @@ import torch.optim as optim
 import torch.utils.data as data
 from torch.autograd import Variable
 from common.net import VGGNet
+from  common.resnet import ResNet18
 from common.senet import SENet18
 from common.densenet import DenseNet
 from common.dataset import TIN200Data
@@ -118,7 +119,9 @@ def main():
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
-    net = VGGNet()
+    #net = VGGNet()
+    net = ResNet18()
+
     #net = SENet18()
     #net.cuda()
     if use_cuda:
