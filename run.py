@@ -140,7 +140,7 @@ def main():
 
     loss_fn = nn.CrossEntropyLoss()
 
-    train(net, loss_fn, optimizer, num_epochs=30, loader=train_loader,val_loader = val_loader)
+    train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader,val_loader = val_loader)
     #check_accuracy(net, val_loader)
 
     #save(net)
