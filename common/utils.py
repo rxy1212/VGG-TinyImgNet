@@ -25,9 +25,9 @@ def save(net, state_dict=False, replace=False):
     '''
     if replace:
         if state_dict:
-            torch.save(net.state_dict(), f'./saved_nets/best_vgg11_1_state.pkl')
+            torch.save(net.state_dict(), f'./saved_nets/best_vgg13_1_state.pkl')
         else:
-            torch.save(net, f'./saved_nets/best_vgg11_1.pkl')
+            torch.save(net, f'./saved_nets/best_vgg13_1.pkl')
     else:
         if state_dict:
             torch.save(net.state_dict(), f'./saved_nets/net_state_{localtime()}.pkl')
@@ -72,3 +72,11 @@ def check_accuracy(net, loader):
     acc = 100.0 * float(num_correct) / num_samples
     print(f'Got {num_correct} / {num_samples} correct ({acc:.2f}%)')
     return acc
+
+
+def adjust_learning_rate(optimizer, decay_rate=0.95):
+    '''
+    Use learning rate decay
+    '''
+    for param_group in optimizer.param_group:
+        param_group['lr'] = param_group['lr'] * decay_rate
