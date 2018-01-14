@@ -125,9 +125,9 @@ def main():
     #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
 
     train_loader = data.DataLoader(
-        train_datasets, batch_size=512, shuffle=True, num_workers=5)
+        train_datasets, batch_size=512, shuffle=True, num_workers=10)
     val_loader = data.DataLoader(
-        val_datasets, batch_size=512, shuffle=True, num_workers=5)
+        val_datasets, batch_size=512, shuffle=True, num_workers=10)
 
     #net = VGGNet()
     #net = models.resnet18()
