@@ -51,6 +51,7 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
             best_acc = acc
             print(f'Got current best_acc:{best_acc:.2f}%, Saving...')
             save(net, False, True)
+        adjust_learning_rate(optimizer)
     print('-------------------------------')
     print(f'{best_acc:.2f}%')
     print('-------------------------------')
@@ -104,7 +105,7 @@ def main(flag=True):
         optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
         loss_fn = nn.CrossEntropyLoss()
 
-        train(net, loss_fn, optimizer, num_epochs=50, loader=train_loader, val_loader=val_loader)
+        train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader, val_loader=val_loader)
     else:
         os.environ["CUDA_VISIBLE_DEVICES"] = "0"
         torch.cuda.is_available()
