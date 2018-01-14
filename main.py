@@ -15,6 +15,9 @@ import torch.utils.data as data
 from torch.autograd import Variable
 from common.net import VGGNet
 from common.resnet import resnet18
+from common.resnet import resnet50
+from common.resnet import resnet101
+from common.resnet import resnet152
 from common.densenet import DenseNet
 from common.dataset import TIN200Data
 from common.utils import localtime, save
@@ -131,7 +134,10 @@ def main():
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(64, 28, 0.4, 200, 64)
-    net = resnet18()
+    #net = resnet18()
+    net = resnet50()
+    #net = resnet101()
+    #net = resnet152()
     #net.cuda()
     if use_cuda:
         net.cuda()
