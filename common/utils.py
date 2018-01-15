@@ -19,20 +19,14 @@ def localtime():
     return time.strftime('%Y%m%d%H%M%S', time.localtime())
 
 
-def save(net, state_dict=False, replace=False):
+def save(net, name, state_dict=False):
     '''
     Save a network
     '''
-    if replace:
-        if state_dict:
-            torch.save(net.state_dict(), f'./saved_nets/best_vgg13_lr_decay_state.pkl')
-        else:
-            torch.save(net, f'./saved_nets/best_vgg13_lr_decay_0.9.pkl')
+    if state_dict:
+        torch.save(net.state_dict(), pjoin('./saved_nets_dict', f'{name}.pkl'))
     else:
-        if state_dict:
-            torch.save(net.state_dict(), f'./saved_nets/net_state_{localtime()}.pkl')
-        else:
-            torch.save(net, f'./saved_nets/net_{localtime()}.pkl')
+        torch.save(net, pjoin('./saved_nets', f'{name}.pkl'))
 
 
 def restore(pkl, model_class=None):

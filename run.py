@@ -35,7 +35,7 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
             loss = loss_fn(scores, y_train)
 
             loss.backward()
-            optimizer.step()
+            # optimizer.step()
             # reference https://discuss.pytorch.org/t/argmax-with-pytorch/1528
             _, preds = scores.data.cpu().max(1)
 
@@ -46,12 +46,13 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
                 print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.2f}%')
 
         acc = check_accuracy(net, val_loader)
+        optimizer.step(acc)
         print(f'last best_acc:{best_acc:.2f}%')
         if acc > best_acc:
             best_acc = acc
             print(f'Got current best_acc:{best_acc:.2f}%, Saving...')
-            save(net, False, True)
-        adjust_learning_rate(optimizer, decay_rate=0.9)
+            save(net, 'vgg13_lr_scheduler')
+        # adjust_learning_rate(optimizer, decay_rate=0.9)
     print('-------------------------------')
     print(f'{best_acc:.2f}%')
     print('-------------------------------')
@@ -101,9 +102,11 @@ def main(flag=True):
         cudnn.benchmark = True
 
         optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
+        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer)
         loss_fn = nn.CrossEntropyLoss()
 
-        train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader, val_loader=val_loader)
+        train(net, loss_fn, scheduler, num_epochs=300,
+              loader=train_loader, val_loader=val_loader)
     else:
         os.environ["CUDA_VISIBLE_DEVICES"] = "0"
         torch.cuda.is_available()
