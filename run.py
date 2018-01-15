@@ -19,7 +19,7 @@ from common.dataset import TIN200Data
 from common.utils import *
 
 
-def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
+def train(net, loss_fn, optimizer, scheduler, num_epochs=1, loader=None, val_loader=None):
     num_correct = 0
     num_samples = 0
     best_acc = 0
@@ -35,7 +35,7 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
             loss = loss_fn(scores, y_train)
 
             loss.backward()
-            # optimizer.step()
+            optimizer.step()
             # reference https://discuss.pytorch.org/t/argmax-with-pytorch/1528
             _, preds = scores.data.cpu().max(1)
 
@@ -46,7 +46,7 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
                 print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.2f}%')
 
         acc = check_accuracy(net, val_loader)
-        optimizer.step(acc)
+        scheduler.step(acc)
         print(f'last best_acc:{best_acc:.2f}%')
         if acc > best_acc:
             best_acc = acc
@@ -105,7 +105,7 @@ def main(flag=True):
         scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer)
         loss_fn = nn.CrossEntropyLoss()
 
-        train(net, loss_fn, scheduler, num_epochs=300,
+        train(net, loss_fn, optimizer, scheduler, num_epochs=300,
               loader=train_loader, val_loader=val_loader)
     else:
         os.environ["CUDA_VISIBLE_DEVICES"] = "0"
