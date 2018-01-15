@@ -177,8 +177,8 @@ def main():
     cudnn.benchmark = True
     # model = Test_Model().cuda()
 
-    model.load_state_dict(torch.load('./net_params/VGG13_net_params1.pkl'))
-    optimizer = optim.SGD(params=model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-06, nesterov=True)
+    # model.load_state_dict(torch.load('./net_params/VGG13_net_params1.pkl'))
+    optimizer = optim.SGD(params=model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
     train(model, loss_fn, optimizer, num_epochs = 50, loader=train_loader, val_loader=val_loader)
