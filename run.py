@@ -46,7 +46,7 @@ def train(net, loss_fn, optimizer, scheduler, num_epochs=1, loader=None, val_loa
                 print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.2f}%')
 
         acc = check_accuracy(net, val_loader)
-        scheduler.step(acc)
+        scheduler.step(acc, epoch=epoch+1)
         print(f'last best_acc:{best_acc:.2f}%')
         if acc > best_acc:
             best_acc = acc
@@ -58,7 +58,7 @@ def train(net, loss_fn, optimizer, scheduler, num_epochs=1, loader=None, val_loa
     print('-------------------------------')
 
 
-def predict(net, loader):
+def predict(net, name, loader):
     print('Predicting on test set')
     classid = []
     test_img_name = []
@@ -80,7 +80,7 @@ def predict(net, loader):
         _, preds = scores.data.cpu().max(1)
         classid += [classid_map[p] for p in preds]
 
-    with open(pjoin(os.getcwd(), 'predictions', f'{localtime()}.txt'), 'w') as f:
+    with open(pjoin(os.getcwd(), 'predictions', f'{name}.txt'), 'w') as f:
         for i in range(len(classid)):
             f.write(f'{test_img_name[i]} {classid[i]}\n')
             if (i + 1) % 500 == 0:
@@ -115,7 +115,7 @@ def main(flag=True):
         print('Load best net...')
         net = restore('best.pkl')
         print('Done. Predicting...')
-        predict(net, test_loader)
+        predict(net, 'first', test_loader)
         print('Done.')
 
 if __name__ == '__main__':

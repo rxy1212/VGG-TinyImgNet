@@ -7,16 +7,16 @@
 @remark: {when} {email} {do what}
 '''
 
-import time
+# import time
 from os.path import join as pjoin
 import torch
 from torch.autograd import Variable
 
-def localtime():
-    '''
-    Get current time
-    '''
-    return time.strftime('%Y%m%d%H%M%S', time.localtime())
+# def localtime():
+#     '''
+#     Get current time
+#     '''
+#     return time.strftime('%Y%m%d%H%M%S', time.localtime())
 
 
 def save(net, name, state_dict=False):
@@ -68,9 +68,9 @@ def check_accuracy(net, loader):
     return acc
 
 
-def adjust_learning_rate(optimizer, decay_rate=0.95):
-    '''
-    Use learning rate decay
-    '''
-    for param_group in optimizer.param_groups:
-        param_group['lr'] = param_group['lr'] * decay_rate
+# def adjust_learning_rate(optimizer, decay_rate=0.95):
+#     '''
+#     Use learning rate decay
+#     '''
+#     for param_group in optimizer.param_groups:
+#         param_group['lr'] = param_group['lr'] * decay_rate
