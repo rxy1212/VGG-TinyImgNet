@@ -11,6 +11,8 @@ import torchvision.transforms as T
 import torch.backends.cudnn as cudnn
 from common.dataset import TIN200Data
 from common.net import Vgg19
+from common.net import Vgg13
+
 
 gpu_type = torch.cuda.FloatTensor
 
@@ -170,16 +172,17 @@ def main():
     val_loader = DataLoader(val_data, batch_size=128, shuffle=True, num_workers=2)
 
     # model = Model().cuda()
-    model = Vgg19().cuda()     # net model in the net.py
+    # model = Vgg19().cuda()     # net model in the net.py
+    model = Vgg13().cuda()
     cudnn.benchmark = True
     # model = Test_Model().cuda()
 
-    # model.load_state_dict(torch.load('./net_params/VGG19_net_params1.pkl'))
+    # model.load_state_dict(torch.load('./net_params/VGG13_net_params1.pkl'))
     optimizer = optim.SGD(params=model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(model, loss_fn, optimizer, num_epochs = 3, loader=train_loader, val_loader=val_loader)
-    torch.save(model.state_dict(),'./net_params/VGG19_net_params1.pkl')
+    train(model, loss_fn, optimizer, num_epochs = 30, loader=train_loader, val_loader=val_loader)
+    torch.save(model.state_dict(),'./net_params/VGG13_net_params1.pkl')
 
   
 
