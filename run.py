@@ -27,38 +27,38 @@ def train(model, loss_fn, scheduler, num_epochs=1, loader=None, val_loader=None)
     best_val_acc = 0
     acc = 0
     val_acc = 0
-    for epoch in range(num_epochs):
-        print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
-        model.train()
-        for t, (x, y) in enumerate(loader):
-            x_train = Variable(x.cuda())
-            y_train = Variable(y.cuda())
+    #for epoch in range(num_epochs):
+        #print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
+    model.train()
+    for t, (x, y) in enumerate(loader):
+        x_train = Variable(x.cuda())
+        y_train = Variable(y.cuda())
 
-            scores = model(x_train)
-            loss = loss_fn(scores, y_train)
+        scores = model(x_train)
+        loss = loss_fn(scores, y_train)
 
             # reference https://discuss.pytorch.org/t/argmax-with-pytorch/1528
-            _, preds = scores.data.cpu().max(1)
+        _, preds = scores.data.cpu().max(1)
 
-            num_correct += (preds == y).sum()
-            num_samples += preds.size(0)
-            acc = float(num_correct) / num_samples
-            if (t + 1) % 20 == 0:
-                print('t = %d, loss = %.4f, acc = %.4f%%' %
-                      (t + 1, loss.data[0], 100 * acc))
+        num_correct += (preds == y).sum()
+        num_samples += preds.size(0)
+        acc = float(num_correct) / num_samples
+        if (t + 1) % 20 == 0:
+            print('t = %d, loss = %.4f, acc = %.4f%%' %
+                    (t + 1, loss.data[0], 100 * acc))
 
-            scheduler.zero_grad()
-            loss.backward()
-            scheduler.step()
-        val_acc = check_accuracy(model,val_loader)
-        if val_acc > best_val_acc:
-            best_val_acc = val_acc
-            print("saving net.....")
-            save(model, True, True)
+        scheduler.zero_grad()
+        loss.backward()
+        #scheduler.step()
+    val_acc = check_accuracy(model,val_loader)
+    if val_acc > best_val_acc:
+        best_val_acc = val_acc
+        print("saving net.....")
+        save(model, True, True)
         #adjust_learning_rate(optimizer)
-        print('-------------------------------')
-        print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
-        print('-------------------------------')
+    print('-------------------------------')
+    print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
+    print('-------------------------------')
 
 
 
@@ -141,13 +141,18 @@ def main():
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
-    optimizer = optim.SGD(params=net.parameters(), lr=0.1, momentum=0.99,weight_decay= 5e-5, nesterov=True)
-    #optimizer = optim.Adam(params=net.parameters(), lr=7e-3, weight_decay = 4e-3)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer,mode='max',factor=0.9,patience=3)
+    #optimizer = optim.SGD(params=net.parameters(), lr=0.1, momentum=0.99,weight_decay= 5e-5, nesterov=True)
+    optimizer = optim.Adam(params=net.parameters(), lr=0.1, weight_decay = 4e-3)
+    milestones= [10,20,30,40,60,70,80,90,100]
+    scheduler = optim.lr_scheduler.MultiStepLR(optimizer,milestones=milestones,gamma=0.1)
 
     loss_fn = nn.CrossEntropyLoss()
+    num_epochs = 100
 
-    train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader,val_loader = val_loader)
+    for epoch in range(num_epochs):
+        print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
+        scheduler.step()
+        train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader,val_loader = val_loader)
     #check_accuracy(net, val_loader)
 
     #save(net)
