@@ -10,6 +10,7 @@ from torch.utils.data import sampler
 import torchvision.transforms as T
 import torch.backends.cudnn as cudnn
 from torch.optim.lr_scheduler import ExponentialLR
+from torch.optim.lr_scheduler import StepLR
 from common.dataset import TIN200Data
 from common.net import Vgg19
 from common.net import Vgg13
@@ -118,7 +119,8 @@ class Test_Model(nn.Module):
 def train(model, loss_fn, optimizer, num_epochs = 1, loader=None, val_loader=None):
     num_correct = 0
     num_samples = 0
-    scheduler = ExponentialLR(optimizer, 0.9)
+    # scheduler = ExponentialLR(optimizer, 0.9)
+    scheduler = StepLR(optimizer, step_size=20, gamma=0.5)
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         scheduler.step()
@@ -173,16 +175,16 @@ def main():
 
     # model = Model().cuda()
     # model = Vgg19().cuda()     # net model in the net.py
-    model = Vgg13().cuda()
+    model = Vgg11().cuda()
     cudnn.benchmark = True
     # model = Test_Model().cuda()
 
-    # model.load_state_dict(torch.load('./net_params/VGG13_net_params1.pkl'))
+    # model.load_state_dict(torch.load('./net_params/VGG11_net_params.pkl'))
     optimizer = optim.SGD(params=model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(model, loss_fn, optimizer, num_epochs = 50, loader=train_loader, val_loader=val_loader)
-    torch.save(model.state_dict(),'./net_params/VGG13_net_params2.pkl')
+    train(model, loss_fn, optimizer, num_epochs = 100, loader=train_loader, val_loader=val_loader)
+    torch.save(model.state_dict(),'./net_params/VGG11_net_params.pkl')
 
 
 if __name__ == '__main__':

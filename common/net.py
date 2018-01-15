@@ -176,10 +176,10 @@ CONF = {
     'B': [64, 64, 'M', 128, 128, 256, 256, 'M', 512, 512, 512, 512, 'M'],
 }
 
-class Vgg13(nn.Module):
+class Vgg11(nn.Module):
     def __init__(self):
-        super(Vgg13, self).__init__()
-        self.features = self._make_layers(CONF['B'], True)
+        super(Vgg11, self).__init__()
+        self.features = self._make_layers(CONF['A'], True)
         self.fc = nn.Sequential(
             nn.Linear(512*8*8, 4096),
             nn.ReLU(),
