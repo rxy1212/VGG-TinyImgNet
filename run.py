@@ -112,7 +112,7 @@ def predict(model, loader):
             f.write(f'{test_img_name[i]} {classid[i]}\n')
     
 
-def adjust_learning_rate(optimizer, decay_rate=0.8):
+def adjust_learning_rate(optimizer, decay_rate=0.5):
     for param_group in optimizer.param_groups:
         param_group['lr'] = param_group['lr'] * decay_rate
 
@@ -141,7 +141,7 @@ def main():
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
-    optimizer = optim.SGD(params=net.parameters(), lr=5e-3, momentum=0.99,weight_decay= 5e-5, nesterov=True)
+    optimizer = optim.SGD(params=net.parameters(), lr=1e-3, momentum=0.99,weight_decay= 5e-5, nesterov=True)
     #optimizer = optim.Adam(params=net.parameters(), lr=7e-3, weight_decay = 4e-3)
 
     loss_fn = nn.CrossEntropyLoss()
