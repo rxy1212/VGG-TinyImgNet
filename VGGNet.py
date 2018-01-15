@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 import torchvision.transforms as T
 import torch.backends.cudnn as cudnn
-import torch.optim.lr_scheduler.ExponentialLR as ExponentialLR
+from torch.optim.lr_scheduler import ExponentialLR
 from common.dataset import TIN200Data
 from common.net import Vgg19
 from common.net import Vgg13
