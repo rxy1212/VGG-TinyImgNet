@@ -16,6 +16,7 @@ from torch.autograd import Variable
 from common.net import VGGNet
 from common.resnet import resnet18
 from common.resnet import resnet50
+from common.resnet import resnet34
 from common.resnet import resnet101
 from common.resnet import resnet152
 from common.densenet import DenseNet
@@ -142,7 +143,8 @@ def main():
     #net = DenseNet(64, 28, 0.4, 200, 64)
     #net = resnet18()
     #net = resnet50()
-    net = resnet101()
+    net = resnet34(pretrained=True)
+    #net = resnet101(pretrained=True)
     #net = resnet152()
     #net.cuda()
     if use_cuda:
