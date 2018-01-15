@@ -21,45 +21,44 @@ import torchvision.models as models
 import torch.backends.cudnn as cudnn
 
 
-def train(model, loss_fn, scheduler, num_epochs=1, loader=None, val_loader=None):
+def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = None):
     num_correct = 0
     num_samples = 0
-    #best_val_acc = 0
+    best_val_acc = 0
     acc = 0
-    #val_acc = 0
-    #for epoch in range(num_epochs):
-        #print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
-    model.train()
-    for t, (x, y) in enumerate(loader):
-        x_train = Variable(x.cuda())
-        y_train = Variable(y.cuda())
+    val_acc = 0
+    for epoch in range(num_epochs):
+        print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
+        model.train()
+        for t, (x, y) in enumerate(loader):
+            x_train = Variable(x.cuda())
+            y_train = Variable(y.cuda())
 
-        scores = model(x_train)
-        loss = loss_fn(scores, y_train)
+            scores = model(x_train)
+            loss = loss_fn(scores, y_train)
 
             # reference https://discuss.pytorch.org/t/argmax-with-pytorch/1528
-        _, preds = scores.data.cpu().max(1)
+            _, preds = scores.data.cpu().max(1)
 
-        num_correct += (preds == y).sum()
-        num_samples += preds.size(0)
-        acc = float(num_correct) / num_samples
-        if (t + 1) % 20 == 0:
-            print('t = %d, loss = %.4f, acc = %.4f%%' %
-                    (t + 1, loss.data[0], 100 * acc))
+            num_correct += (preds == y).sum()
+            num_samples += preds.size(0)
+            acc = float(num_correct) / num_samples
+            if (t + 1) % 20 == 0:
+                print('t = %d, loss = %.4f, acc = %.4f%%' %
+                      (t + 1, loss.data[0], 100 * acc))
 
-        scheduler.zero_grad()
-        loss.backward()
-        #scheduler.step()
-    val_acc = check_accuracy(model,val_loader)
-    #if val_acc > best_val_acc:
-    #    best_val_acc = val_acc
-    #    print("saving net.....")
-    #    save(model, True, True)
-        #adjust_learning_rate(optimizer)
-    #print('-------------------------------')
-    #print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
-    #print('-------------------------------')
-    return val_acc
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+        val_acc = check_accuracy(model,val_loader)
+        if val_acc > best_val_acc:
+            best_val_acc = val_acc
+            print("saving net.....")
+            save(model, True, True)
+        adjust_learning_rate(optimizer)
+        print('-------------------------------')
+        print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
+        print('-------------------------------')
 
 
 
@@ -113,7 +112,7 @@ def predict(model, loader):
             f.write(f'{test_img_name[i]} {classid[i]}\n')
     
 
-def adjust_learning_rate(optimizer, decay_rate=1.05):
+def adjust_learning_rate(optimizer, decay_rate=0.9):
     for param_group in optimizer.param_groups:
         param_group['lr'] = param_group['lr'] * decay_rate
 
@@ -128,40 +127,26 @@ def main():
     # test_datasets = TIN200Data(
     #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
 
-    train_loader = data.DataLoader(train_datasets, batch_size=256, shuffle=True, num_workers=4)
-    val_loader = data.DataLoader(val_datasets, batch_size=256, shuffle=True, num_workers=4)
+    train_loader = data.DataLoader(train_datasets, batch_size=128, shuffle=True, num_workers=4)
+    val_loader = data.DataLoader(val_datasets, batch_size=128, shuffle=True, num_workers=4)
 
     #net = VGGNet()
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
-    net = DenseNet(64,16,0.4,200,64)
+    net = DenseNet(64,28,0.4,200,64)
     #net.cuda()
     if use_cuda:
         net.cuda()
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
-    optimizer = optim.SGD(params=net.parameters(), lr=5e-4, momentum=0.99,weight_decay= 5e-5, nesterov=True)
-    #optimizer = optim.Adam(params=net.parameters(), lr=5e-3, weight_decay = 5e-3)
-    milestones= [10,20,30,40,60,70,80,90,100]
-    scheduler = optim.lr_scheduler.MultiStepLR(optimizer,milestones=milestones,gamma=0.8)
+    optimizer = optim.SGD(params=net.parameters(), lr=5e-3, momentum=0.99,weight_decay= 5e-5, nesterov=True)
+    #optimizer = optim.Adam(params=net.parameters(), lr=7e-3, weight_decay = 4e-3)
 
     loss_fn = nn.CrossEntropyLoss()
-    num_epochs = 100
-    best_val_acc = 0
-    for epoch in range(num_epochs):
-        print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
-        scheduler.step()
-        val_acc = train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader,val_loader = val_loader)
-        if val_acc > best_val_acc:
-            best_val_acc = val_acc
-            print("saving net.....")
-            save(net, True, True)
-            #adjust_learning_rate(optimizer)
-        print('-------------------------------')
-        print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
-        print('-------------------------------')
+
+    train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader,val_loader = val_loader)
     #check_accuracy(net, val_loader)
 
     #save(net)
