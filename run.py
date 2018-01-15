@@ -51,7 +51,7 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
             best_acc = acc
             print(f'Got current best_acc:{best_acc:.2f}%, Saving...')
             save(net, False, True)
-        adjust_learning_rate(optimizer)
+        adjust_learning_rate(optimizer, decay_rate=0.9)
     print('-------------------------------')
     print(f'{best_acc:.2f}%')
     print('-------------------------------')
