@@ -141,7 +141,7 @@ def main():
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
-    optimizer = optim.SGD(params=net.parameters(), lr=5e-2, momentum=0.99,weight_decay= 5e-5, nesterov=True)
+    optimizer = optim.SGD(params=net.parameters(), lr=5e-3, momentum=0.99,weight_decay= 5e-5, nesterov=True)
     #optimizer = optim.Adam(params=net.parameters(), lr=7e-3, weight_decay = 4e-3)
 
     loss_fn = nn.CrossEntropyLoss()
