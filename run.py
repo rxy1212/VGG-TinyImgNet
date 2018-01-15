@@ -58,8 +58,6 @@ def train(net, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
 
 
 def predict(net, loader):
-    from os.path import join as pjoin
-
     print('Predicting on test set')
     classid = []
     test_img_name = []
