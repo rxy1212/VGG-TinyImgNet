@@ -181,7 +181,7 @@ def main():
     optimizer = optim.SGD(params=model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(model, loss_fn, optimizer, num_epochs = 30, loader=train_loader, val_loader=val_loader)
+    train(model, loss_fn, optimizer, num_epochs = 50, loader=train_loader, val_loader=val_loader)
     torch.save(model.state_dict(),'./net_params/VGG13_net_params2.pkl')
 
 
