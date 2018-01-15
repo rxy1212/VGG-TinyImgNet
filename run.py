@@ -102,7 +102,7 @@ def main(flag=True):
         cudnn.benchmark = True
 
         optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
-        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer)
+        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max')
         loss_fn = nn.CrossEntropyLoss()
 
         train(net, loss_fn, optimizer, scheduler, num_epochs=300,
