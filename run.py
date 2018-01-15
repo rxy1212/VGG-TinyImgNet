@@ -112,7 +112,7 @@ def predict(model, loader):
             f.write(f'{test_img_name[i]} {classid[i]}\n')
     
 
-def adjust_learning_rate(optimizer, decay_rate=0.5):
+def adjust_learning_rate(optimizer, decay_rate=0.8):
     for param_group in optimizer.param_groups:
         param_group['lr'] = param_group['lr'] * decay_rate
 
