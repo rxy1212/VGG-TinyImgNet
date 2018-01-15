@@ -55,7 +55,7 @@ def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = Non
             best_val_acc = val_acc
             print("saving net.....")
             save(model, True, True)
-        adjust_learning_rate(optimizer)
+        adjust_learning_rate(optimizer,num_epochs)
         print('-------------------------------')
         print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
         print('-------------------------------')
@@ -115,11 +115,11 @@ def predict(model, loader):
 #def adjust_learning_rate(optimizer, decay_rate=0.8):
 #    for param_group in optimizer.param_groups:
 #        param_group['lr'] = param_group['lr'] * decay_rate
-def adjust_learning_rate(optimizer, epoch):
+def adjust_learning_rate(optimizer, num_epochs):
     """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
-    lr = args.lr * (0.1 ** (epoch // 30))
+    #lr = args.lr * (0.1 ** (epoch // 30))
     for param_group in optimizer.param_groups:
-        param_group['lr'] = lr
+        param_group['lr'] = param_group['lr'](0.1 ** (num_epochs // 30))
 
 
 def main():
