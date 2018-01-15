@@ -112,7 +112,7 @@ def predict(model, loader):
             f.write(f'{test_img_name[i]} {classid[i]}\n')
     
 
-def adjust_learning_rate(optimizer, decay_rate=0.9):
+def adjust_learning_rate(optimizer, decay_rate=0.8):
     for param_group in optimizer.param_groups:
         param_group['lr'] = param_group['lr'] * decay_rate
 
@@ -127,21 +127,21 @@ def main():
     # test_datasets = TIN200Data(
     #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
 
-    train_loader = data.DataLoader(train_datasets, batch_size=64, shuffle=True, num_workers=4)
-    val_loader = data.DataLoader(val_datasets, batch_size=64, shuffle=True, num_workers=4)
+    train_loader = data.DataLoader(train_datasets, batch_size=128, shuffle=True, num_workers=4)
+    val_loader = data.DataLoader(val_datasets, batch_size=128, shuffle=True, num_workers=4)
 
     #net = VGGNet()
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
-    net = DenseNet(64,28,4,200,64)
+    net = DenseNet(64,16,2,200,64)
     #net.cuda()
     if use_cuda:
         net.cuda()
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
-    optimizer = optim.SGD(params=net.parameters(), lr=5e-3, momentum=0.99,weight_decay= 5e-5, nesterov=True)
+    optimizer = optim.SGD(params=net.parameters(), lr=5e-2, momentum=0.99,weight_decay= 5e-5, nesterov=True)
     #optimizer = optim.Adam(params=net.parameters(), lr=7e-3, weight_decay = 4e-3)
 
     loss_fn = nn.CrossEntropyLoss()
