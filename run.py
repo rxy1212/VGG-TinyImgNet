@@ -112,9 +112,14 @@ def predict(model, loader):
             f.write(f'{test_img_name[i]} {classid[i]}\n')
     
 
-def adjust_learning_rate(optimizer, decay_rate=0.8):
+#def adjust_learning_rate(optimizer, decay_rate=0.8):
+#    for param_group in optimizer.param_groups:
+#        param_group['lr'] = param_group['lr'] * decay_rate
+def adjust_learning_rate(optimizer, epoch):
+    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
+    lr = args.lr * (0.1 ** (epoch // 30))
     for param_group in optimizer.param_groups:
-        param_group['lr'] = param_group['lr'] * decay_rate
+        param_group['lr'] = lr
 
 
 def main():
@@ -141,12 +146,12 @@ def main():
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
-    optimizer = optim.SGD(params=net.parameters(), lr=5e-3, momentum=0.99,weight_decay= 5e-4, nesterov=False)
+    optimizer = optim.SGD(params=net.parameters(), lr=0.1, momentum=0.9,weight_decay= 1e-4, nesterov=True)
     #optimizer = optim.Adam(params=net.parameters(), lr=7e-3, weight_decay = 4e-3)
 
     loss_fn = nn.CrossEntropyLoss()
-
-    train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader,val_loader = val_loader)
+    num_epochs = 90
+    train(net, loss_fn, optimizer, num_epochs=num_epochs, loader=train_loader,val_loader = val_loader)
     #check_accuracy(net, val_loader)
 
     #save(net)
