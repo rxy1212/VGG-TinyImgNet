@@ -56,7 +56,7 @@ class Transition(nn.Module):
 
     def forward(self, x):
         out = self.conv1(F.relu(self.bn1(x)))
-        out = F.avg_pool2d(out, 2)
+        out = F.avg_pool2d(out, 4, stride=2, padding =1 )
         return out
 
 
