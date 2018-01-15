@@ -24,9 +24,9 @@ import torch.backends.cudnn as cudnn
 def train(model, loss_fn, scheduler, num_epochs=1, loader=None, val_loader=None):
     num_correct = 0
     num_samples = 0
-    best_val_acc = 0
+    #best_val_acc = 0
     acc = 0
-    val_acc = 0
+    #val_acc = 0
     #for epoch in range(num_epochs):
         #print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
     model.train()
@@ -51,14 +51,15 @@ def train(model, loss_fn, scheduler, num_epochs=1, loader=None, val_loader=None)
         loss.backward()
         #scheduler.step()
     val_acc = check_accuracy(model,val_loader)
-    if val_acc > best_val_acc:
-        best_val_acc = val_acc
-        print("saving net.....")
-        save(model, True, True)
+    #if val_acc > best_val_acc:
+    #    best_val_acc = val_acc
+    #    print("saving net.....")
+    #    save(model, True, True)
         #adjust_learning_rate(optimizer)
-    print('-------------------------------')
-    print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
-    print('-------------------------------')
+    #print('-------------------------------')
+    #print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
+    #print('-------------------------------')
+    return val_acc
 
 
 
@@ -148,11 +149,19 @@ def main():
 
     loss_fn = nn.CrossEntropyLoss()
     num_epochs = 100
-
+    best_val_acc = 0
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         scheduler.step()
-        train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader,val_loader = val_loader)
+        val_acc = train(net, loss_fn, optimizer, num_epochs=100, loader=train_loader,val_loader = val_loader)
+        if val_acc > best_val_acc:
+            best_val_acc = val_acc
+            print("saving net.....")
+            save(net, True, True)
+            #adjust_learning_rate(optimizer)
+        print('-------------------------------')
+        print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
+        print('-------------------------------')
     #check_accuracy(net, val_loader)
 
     #save(net)
