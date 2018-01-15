@@ -9,10 +9,10 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 import torchvision.transforms as T
 import torch.backends.cudnn as cudnn
+import torch.optim.lr_scheduler.ExponentialLR as ExponentialLR
 from common.dataset import TIN200Data
 from common.net import Vgg19
 from common.net import Vgg13
-
 
 gpu_type = torch.cuda.FloatTensor
 
@@ -20,7 +20,6 @@ class Flatten(nn.Module):
     def forward(self, x):
         N, C, H, W = x.size()
         return x.view(N, -1)
-
 
 class Model(nn.Module):
     def __init__(self):
@@ -116,12 +115,13 @@ class Test_Model(nn.Module):
         return x
 
 
-
 def train(model, loss_fn, optimizer, num_epochs = 1, loader=None, val_loader=None):
     num_correct = 0
     num_samples = 0
+    scheduler = ExponentialLR(optimizer, 0.9)
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
+        scheduler.step()
         model.train()
         for t, (x, y) in enumerate(loader):
             x_train = Variable(x.cuda())
@@ -184,7 +184,6 @@ def main():
     train(model, loss_fn, optimizer, num_epochs = 30, loader=train_loader, val_loader=val_loader)
     torch.save(model.state_dict(),'./net_params/VGG13_net_params1.pkl')
 
-  
 
 if __name__ == '__main__':
     main()
