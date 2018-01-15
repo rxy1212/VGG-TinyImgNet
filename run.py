@@ -21,7 +21,7 @@ import torchvision.models as models
 import torch.backends.cudnn as cudnn
 
 
-def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = None):
+def train(model, loss_fn, scheduler, num_epochs=1, loader=None, val_loader=None):
     num_correct = 0
     num_samples = 0
     best_val_acc = 0
@@ -47,15 +47,15 @@ def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = Non
                 print('t = %d, loss = %.4f, acc = %.4f%%' %
                       (t + 1, loss.data[0], 100 * acc))
 
-            optimizer.zero_grad()
+            scheduler.zero_grad()
             loss.backward()
-            optimizer.step()
+            scheduler.step()
         val_acc = check_accuracy(model,val_loader)
         if val_acc > best_val_acc:
             best_val_acc = val_acc
             print("saving net.....")
             save(model, True, True)
-        adjust_learning_rate(optimizer)
+        #adjust_learning_rate(optimizer)
         print('-------------------------------')
         print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
         print('-------------------------------')
@@ -141,8 +141,9 @@ def main():
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
-    optimizer = optim.SGD(params=net.parameters(), lr=5e-4, momentum=0.99,weight_decay= 5e-5, nesterov=True)
+    optimizer = optim.SGD(params=net.parameters(), lr=0.1, momentum=0.99,weight_decay= 5e-5, nesterov=True)
     #optimizer = optim.Adam(params=net.parameters(), lr=7e-3, weight_decay = 4e-3)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer,mode='max',factor=0.9,patience=3)
 
     loss_fn = nn.CrossEntropyLoss()
 
