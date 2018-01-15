@@ -114,6 +114,11 @@ def predict(model, loader):
             f.write(f'{test_img_name[i]} {classid[i]}\n')
 
 
+def adjust_learning_rate(optimizer, decay_rate=1.05):
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = param_group['lr'] * decay_rate
+
+
 def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = "2,3"
     use_cuda = torch.cuda.is_available()
