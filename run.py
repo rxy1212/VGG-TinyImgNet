@@ -142,8 +142,8 @@ def main():
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
-    #optimizer = optim.SGD(params=net.parameters(), lr=0.1, momentum=0.99,weight_decay= 5e-5, nesterov=True)
-    optimizer = optim.Adam(params=net.parameters(), lr=5e-4, weight_decay = 5e-3)
+    optimizer = optim.SGD(params=net.parameters(), lr=0.1, momentum=0.99,weight_decay= 5e-5, nesterov=True)
+    #optimizer = optim.Adam(params=net.parameters(), lr=5e-3, weight_decay = 5e-3)
     milestones= [10,20,30,40,60,70,80,90,100]
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer,milestones=milestones,gamma=0.8)
 
