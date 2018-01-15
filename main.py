@@ -145,7 +145,7 @@ def main():
     #net = DenseNet(64, 28, 0.4, 200, 64)
     #net = resnet18()
     #net = resnet50()
-    net = resnet34(pretrained=True)
+    net = resnet34()
     #net = resnet101(pretrained=True)
     #net = resnet152()
     #net.cuda()
