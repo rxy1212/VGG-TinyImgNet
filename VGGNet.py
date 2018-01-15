@@ -13,7 +13,7 @@ from torch.optim.lr_scheduler import ExponentialLR
 from torch.optim.lr_scheduler import StepLR
 from common.dataset import TIN200Data
 from common.net import Vgg19
-from common.net import Vgg13
+from common.net import Vgg11
 
 gpu_type = torch.cuda.FloatTensor
 
