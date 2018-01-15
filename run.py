@@ -52,6 +52,8 @@ def train(net, loss_fn, optimizer, scheduler, num_epochs=1, loader=None, val_loa
             best_acc = acc
             print(f'Got current best_acc:{best_acc:.2f}%, Saving...')
             save(net, 'vgg13_lr_scheduler')
+        current_lr = optimizer.param_groups[0]['lr']
+        print(f'current lr:{current_lr}')
         # adjust_learning_rate(optimizer, decay_rate=0.9)
     print('-------------------------------')
     print(f'{best_acc:.2f}%')
