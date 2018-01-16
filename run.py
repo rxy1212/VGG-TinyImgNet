@@ -21,6 +21,7 @@ import torchvision.models as models
 import torch.backends.cudnn as cudnn
 
 
+
 def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader = None):
     num_correct = 0
     num_samples = 0
@@ -139,7 +140,8 @@ def main():
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
-    net = DenseNet(48,16,0.5,200,64)
+    #net = DenseNet(48,16,0.5,200,64)
+    net = models.densenet161(num_classes = 200)
     #net.cuda()
     if use_cuda:
         net.cuda()
