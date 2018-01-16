@@ -23,10 +23,11 @@ def save(net, name, state_dict=False):
     '''
     Save a network
     '''
+    assert isinstance(str, name), 'name must be a string'
     if state_dict:
-        torch.save(net.state_dict(), pjoin('./saved_nets_dict', f'{name}.pkl'))
+        torch.save(net.state_dict(), pjoin('./saved_nets_dict', name + '.pkl'))
     else:
-        torch.save(net, pjoin('./saved_nets', f'{name}.pkl'))
+        torch.save(net, pjoin('./saved_nets', name + '.pkl'))
 
 
 def restore(pkl, model_class=None):

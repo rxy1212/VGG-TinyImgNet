@@ -47,9 +47,9 @@ class VGGNet(nn.Module):
             nn.Conv2d(256, 256, 3, padding=1),
             nn.ReLU(),
             nn.BatchNorm2d(256),
-            nn.Conv2d(256, 512, 3, padding=1),
+            nn.Conv2d(256, 256, 3, padding=1),
             nn.ReLU(),
-            nn.BatchNorm2d(512)
+            nn.BatchNorm2d(256)
         )
 
         self.conv4 = nn.Sequential(
@@ -73,8 +73,7 @@ class VGGNet(nn.Module):
             nn.Linear(4096, 2048),
             nn.ReLU(),
             nn.Dropout(),
-            nn.Linear(2048, 200, bias=False),
-            # nn.Softmax(dim=1)
+            nn.Linear(2048, 200, bias=False)
         )
 
     def forward(self, x):
@@ -83,7 +82,7 @@ class VGGNet(nn.Module):
         x = self.conv2(x)
         x = self.pool2(x)
         x = self.conv3(x)
-        # x = self.conv4(x)
+        x = self.conv4(x)
         x = self.pool3(x)
         x = x.view(x.size(0), -1)
         x = self.fcn(x)
