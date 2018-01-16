@@ -112,7 +112,8 @@ class VGG(nn.Module):
             nn.Linear(4096, 4096),
             nn.ReLU(),
             nn.Dropout(),
-            nn.Linear(4096, 200)
+            nn.Linear(4096, 200),
+            nn.Softmax(dim=1)
         )
 
     def forward(self, x):
