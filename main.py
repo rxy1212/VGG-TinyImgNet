@@ -146,8 +146,8 @@ def main():
     #net = DenseNet(64, 28, 0.4, 200, 64)
     #net = resnet18()
     #net = resnet50()
-    net = resnet34()
-    #net = resnet101()
+    #net = resnet34()
+    net = resnet101()
     #net = resnet152()
     #net.cuda()
     if use_cuda:
@@ -155,7 +155,7 @@ def main():
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
-    optimizer = optim.SGD(params=net.parameters(), lr=0.1,
+    optimizer = optim.SGD(params=net.parameters(), lr=1,
                           momentum=0.9, weight_decay=1e-4, nesterov=True)
     #optimizer = optim.Adam(params=net.parameters(), lr=0.1, weight_decay = 5e-3)
     lr_schedule = optim.lr_scheduler.ReduceLROnPlateau(
