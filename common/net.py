@@ -215,8 +215,8 @@ class GoogleNet(nn.Module):
     def __init__(self):
         super(GoogleNet, self).__init__()
         self.pre_layer = nn.Sequential(
-                            nn.Conv2d(3, 256, kernel_size=3, padding=1),
-                            nn.BatchNorm2d(256),
+                            nn.Conv2d(3, 192, kernel_size=3, padding=1),
+                            nn.BatchNorm2d(192),
                             nn.ReLU(inplace=True),
                             )
         self.inception = nn.Sequential(
