@@ -222,7 +222,7 @@ class GoogleNet(nn.Module):
                             )
         self.inception = nn.Sequential(
                             Inception(64, 64, 128, 96, 32, 64, 32),
-                            Inception(256, 128, 128, 192, 32, 96, 64),
+                            Inception(256, 128, 128, 224, 32, 96, 64),
                             nn.MaxPool2d(3, stride=2, padding=1),    #shape 32x32x512
                             Inception(512, 192, 128, 256, 64, 128, 64),
                             Inception(640, 256, 196, 256, 64, 128, 32),
