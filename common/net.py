@@ -226,13 +226,13 @@ class GoogleNet(nn.Module):
                             nn.MaxPool2d(3, stride=2, padding=1),    #shape 32x32x480
                             Inception(480, 192, 96, 208, 16, 48, 64),
                             Inception(512, 160, 112, 224, 24, 64, 64),
-                            # nn.MaxPool2d(3, stride=2, padding=1),   #shape 16x16x512
-                            # Inception(512, 128, 128, 256, 24,  64,  64),
-                            # Inception(512, 112, 144, 288, 32,  64,  64),
-                            nn.AvgPool2d(3, stride=2),    #shape 15x15x512
+                            nn.MaxPool2d(3, stride=2, padding=1),   #shape 16x16x512
+                            Inception(512, 128, 128, 256, 24,  64,  64),
+                            Inception(512, 112, 144, 288, 32,  64,  64),
+                            nn.AvgPool2d(3, stride=2),    #shape 7x7x528
                             )
         self.fc = nn.Sequential(
-                        nn.Linear(15*15*512, 4096),
+                        nn.Linear(7*7*528, 4096),
                         nn.ReLU(),
                         nn.Dropout(),
                         nn.Linear(4096, 4096),
