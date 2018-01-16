@@ -216,29 +216,29 @@ class GoogleNet(nn.Module):
     def __init__(self):
         super(GoogleNet, self).__init__()
         self.pre_layer = nn.Sequential(
-                            nn.Conv2d(3, 192, kernel_size=3, padding=1),
-                            nn.BatchNorm2d(192),
+                            nn.Conv2d(3, 64, kernel_size=3, padding=1),
+                            nn.BatchNorm2d(64),
                             nn.ReLU(inplace=True),
                             )
         self.inception = nn.Sequential(
-                            Inception(192, 64, 96, 128, 16, 32, 32),
+                            Inception(64, 64, 128, 96, 32, 64, 32),
                             Inception(256, 128, 128, 192, 32, 96, 64),
-                            nn.MaxPool2d(3, stride=2, padding=1),    #shape 32x32x480
-                            Inception(480, 192, 96, 208, 16, 48, 64),
-                            Inception(512, 160, 112, 224, 24, 64, 64),
-                            nn.MaxPool2d(3, stride=2, padding=1),   #shape 16x16x512
-                            Inception(512, 128, 128, 256, 24,  64,  64),
-                            Inception(512, 112, 144, 288, 32,  64,  64),
-                            nn.AvgPool2d(3, stride=2),    #shape 7x7x528
+                            nn.MaxPool2d(3, stride=2, padding=1),    #shape 32x32x512
+                            Inception(512, 192, 128, 256, 64, 128, 64),
+                            Inception(640, 256, 196, 256, 64, 128, 32),
+                            # nn.MaxPool2d(3, stride=2, padding=1),   #shape 16x16x512
+                            Inception(672, 256, 256, 448, 128,  256,  64),
+                            # Inception(512, 112, 144, 288, 32,  64,  64),
+                            nn.AvgPool2d(3, stride=2),    #shape 15x15x1024
                             )
         self.fc = nn.Sequential(
-                        nn.Linear(7*7*528, 4096),
+                        nn.Linear(1024, 512),
                         nn.ReLU(),
                         nn.Dropout(),
-                        nn.Linear(4096, 4096),
+                        nn.Linear(512, 512),
                         nn.ReLU(),
                         nn.Dropout(),
-                        nn.Linear(4096, 200),
+                        nn.Linear(512, 200),
                         )
     def forward(self, x):
         x = self.pre_layer(x)
