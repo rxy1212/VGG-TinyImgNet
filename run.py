@@ -42,7 +42,7 @@ def train(net, loss_fn, optimizer, scheduler, num_epochs=1, loader=None, val_loa
             num_correct += (preds == y).sum()
             num_samples += preds.size(0)
             acc = 100.0 * float(num_correct) / num_samples
-            if (t + 1) % 20 == 0:
+            if (t + 1) % 100 == 0:
                 print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.2f}%')
 
         acc = check_accuracy(net, val_loader)
