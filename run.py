@@ -91,7 +91,7 @@ def predict(net, name, loader):
 
 def main(flag=True):
     if flag:
-        os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+        os.environ["CUDA_VISIBLE_DEVICES"] = "1"
         torch.cuda.is_available()
 
         train_datasets = TIN200Data('/data1')
