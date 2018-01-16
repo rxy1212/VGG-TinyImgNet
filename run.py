@@ -97,8 +97,8 @@ def main(flag=True):
         train_datasets = TIN200Data('/data1')
         val_datasets = TIN200Data('/data1', 'val')
 
-        train_loader = data.DataLoader(train_datasets, batch_size=256, shuffle=True, num_workers=4)
-        val_loader = data.DataLoader(val_datasets, batch_size=256, num_workers=4)
+        train_loader = data.DataLoader(train_datasets, batch_size=200, shuffle=True, num_workers=4)
+        val_loader = data.DataLoader(val_datasets, batch_size=200, num_workers=4)
 
         net = VGGNet().cuda()
         cudnn.benchmark = True
