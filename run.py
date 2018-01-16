@@ -24,7 +24,7 @@ import torch.backends.cudnn as cudnn
 
 
 
-def train(model, loss_fn, optimizer,lr_schedule, num_epochs=1, loader=None, val_loader = None):
+def train(model, loss_fn, optimizer, lr_schedule, num_epochs=1, loader=None, val_loader = None):
     num_correct = 0
     num_samples = 0
     best_val_acc = 0
