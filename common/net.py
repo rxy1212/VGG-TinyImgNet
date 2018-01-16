@@ -210,3 +210,83 @@ class Vgg11(nn.Module):
                     layers += [conv2d, nn.ReLU(inplace=True)]
                 in_channels = v
         return nn.Sequential(*layers)
+
+class GoogleNet(nn.Module):
+    def __init__(self):
+        super(GoogleNet, self).__init__()
+        self.pre_layer = nn.Sequential(
+                            nn.Conv2d(3, 256, kernel_size=3, padding=1),
+                            nn.BatchNorm2d(256),
+                            nn.ReLU(inplace=True),
+                            )
+        self.inception = nn.Sequential(
+                            Inception(192, 64, 96, 128, 16, 32, 32),
+                            Inception(256, 128, 128, 192, 32, 96, 64),
+                            nn.MaxPool2d(3, stride=2, padding=1),    #shape 32x32x480
+                            Inception(480, 192, 96, 208, 16, 48, 64),
+                            Inception(512, 160, 112, 224, 24, 64, 64),
+                            nn.MaxPool2d(3, stride=2, padding=1),   #shape 16x16x512
+                            Inception(512, 128, 128, 256, 24,  64,  64),
+                            Inception(512, 112, 144, 288, 32,  64,  64),
+                            nn.MaxPool2d(3, stride=2, padding=1),    #shape 8x8x528
+                            )
+        self.fc = nn.Sequential(
+                        nn.Linear(8*8*528, 4096),
+                        nn.ReLU(),
+                        nn.Dropout(),
+                        nn.Linear(4096, 4096),
+                        nn.ReLU(),
+                        nn.Dropout(),
+                        nn.Linear(4096, 200),
+                        )
+    def forward(self, x):
+        x = self.pre_layer(x)
+        x = self.inception(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc(x)
+        return x
+
+
+        
+
+class Inception(nn.Module):
+    def __init__(self, in_chanle, n1x1, n3x3b, n3x3, n5x5b, n5x5, pool_chanel):
+        super(Inception, self).__init__()
+        # 1x1 conv branch
+        self.branch1 = nn.Sequential(
+                            nn.Conv2d(in_chanle, n1x1, kernel_size=1),
+                            nn.BatchNorm2d(n1x1),
+                            nn.ReLU(inplace=True),
+                            )
+        # 1x1 conv -> 3x3 conv branch
+        self.branch2 = nn.Sequential(
+                            nn.Conv2d(in_chanle, n3x3b, kernel_size=1),
+                            nn.BatchNorm2d(n3x3b),
+                            nn.ReLU(inplace=True),
+                            nn.Conv2d(n3x3b, n3x3, kernel_size=3, padding=1),
+                            nn.BatchNorm2d(n3x3),
+                            nn.ReLU(inplace=True),
+                            )
+        # 1x1 conv -> 5x5 conv branch
+        self.branch3 = nn.Sequential(
+                            nn.Conv2d(in_chanle, n5x5b, kernel_size=1),
+                            nn.BatchNorm2d(n5x5b),
+                            nn.ReLU(inplace=True),
+                            nn.Conv2d(n5x5b, n5x5, kernel_size=3, padding=1),
+                            nn.BatchNorm2d(n5x5),
+                            nn.ReLU(inplace=True),
+                            )
+        # 3x3 pool -> 1x1 conv branch 
+        self.branch4 = nn.Sequential(
+                            nn.MaxPool2d(3, stride=1, padding=1),
+                            nn.Conv2d(in_chanle, pool_chanel, kernel_size=1),
+                            nn.BatchNorm2d(pool_chanel),
+                            nn.ReLU(inplace=True),
+                            )
+
+    def forward(self, x):
+        y1 = self.branch1(x)
+        y2 = self.branch2(x)
+        y3 = self.branch3(x)
+        y4 = self.branch4(x)
+        return torch.cat([y1, y2, y3, y4], 3)

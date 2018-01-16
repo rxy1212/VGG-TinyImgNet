@@ -14,6 +14,7 @@ from torch.optim.lr_scheduler import StepLR
 from common.dataset import TIN200Data
 from common.net import Vgg19
 from common.net import Vgg11
+from common.net import GoogleNet
 
 gpu_type = torch.cuda.FloatTensor
 
@@ -120,7 +121,7 @@ def train(model, loss_fn, optimizer, num_epochs = 1, loader=None, val_loader=Non
     num_correct = 0
     num_samples = 0
     # scheduler = ExponentialLR(optimizer, 0.9)
-    scheduler = StepLR(optimizer, step_size=20, gamma=0.5)
+    scheduler = StepLR(optimizer, step_size=20, gamma=0.2)
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         scheduler.step()
@@ -175,7 +176,8 @@ def main():
 
     # model = Model().cuda()
     # model = Vgg19().cuda()     # net model in the net.py
-    model = Vgg11().cuda()
+    # model = Vgg11().cuda()
+    model = GoogleNet().cuda()
     cudnn.benchmark = True
     # model = Test_Model().cuda()
 
@@ -184,7 +186,7 @@ def main():
     loss_fn = nn.CrossEntropyLoss()
 
     train(model, loss_fn, optimizer, num_epochs = 100, loader=train_loader, val_loader=val_loader)
-    torch.save(model.state_dict(),'./net_params/VGG11_net_params.pkl')
+    torch.save(model.state_dict(),'./net_params/GoogleNet_net_params.pkl')
 
 
 if __name__ == '__main__':
