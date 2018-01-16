@@ -54,7 +54,7 @@ def train(model, loss_fn, optimizer,lr_schedule, num_epochs=1, loader=None, val_
             loss.backward()
             optimizer.step()
         val_acc = check_accuracy(model,val_loader)
-        lr_schedule(val_acc, epoch=epoch+1)
+        lr_schedule.step(val_acc, epoch=epoch+1)
         if val_acc > best_val_acc:
             best_val_acc = val_acc
             print("saving net.....")
@@ -154,7 +154,7 @@ def main():
         cudnn.benchmark = True
     optimizer = optim.SGD(params=net.parameters(), lr=0.1, momentum=0.9,weight_decay= 1e-4, nesterov=True)
     #optimizer = optim.Adam(params=net.parameters(), lr=7e-3, weight_decay = 4e-3)
-    lr_schedule = optim.lr_scheduler.ReduceLROnPlateau(optimizer,mode='max',verbose= True,patience=5)
+    lr_schedule = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max',verbose= True,patience=5)
 
     loss_fn = nn.CrossEntropyLoss()
     num_epochs = 100
