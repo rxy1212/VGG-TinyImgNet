@@ -103,7 +103,8 @@ def main(flag=True):
         net = VGG().cuda()
         cudnn.benchmark = True
 
-        optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
+        # optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
+        optimizer = optim.Adam(net.parameters(), lr=0.1)
         scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', verbose=True)
         loss_fn = nn.CrossEntropyLoss()
 
