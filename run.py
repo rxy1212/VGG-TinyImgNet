@@ -51,7 +51,7 @@ def train(net, loss_fn, optimizer, scheduler, num_epochs=1, loader=None, val_loa
         if acc > best_acc:
             best_acc = acc
             print(f'Got current best_acc:{best_acc:.2f}%, Saving...')
-            save(net, 'vggnet3')
+            save(net, 'vggnet3_1')
         current_lr = optimizer.param_groups[0]['lr']
         print(f'current lr:{current_lr}')
         # adjust_learning_rate(optimizer, decay_rate=0.9)
