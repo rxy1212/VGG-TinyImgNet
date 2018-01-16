@@ -229,10 +229,10 @@ class GoogleNet(nn.Module):
                             # nn.MaxPool2d(3, stride=2, padding=1),   #shape 16x16x512
                             # Inception(512, 128, 128, 256, 24,  64,  64),
                             # Inception(512, 112, 144, 288, 32,  64,  64),
-                            nn.AvgPool2d(3, stride=2),    #shape 15x15x528
+                            nn.AvgPool2d(3, stride=2),    #shape 15x15x512
                             )
         self.fc = nn.Sequential(
-                        nn.Linear(15*15*528, 4096),
+                        nn.Linear(15*15*512, 4096),
                         nn.ReLU(),
                         nn.Dropout(),
                         nn.Linear(4096, 4096),
