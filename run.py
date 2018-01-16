@@ -14,7 +14,7 @@ import torch.optim as optim
 import torch.utils.data as data
 from torch.autograd import Variable
 import torch.backends.cudnn as cudnn
-from common.net import VGGNet3
+from common.net import VGGNet4
 from common.dataset import TIN200Data
 from common.utils import *
 
@@ -42,7 +42,7 @@ def train(net, loss_fn, optimizer, scheduler, num_epochs=1, loader=None, val_loa
             num_correct += (preds == y).sum()
             num_samples += preds.size(0)
             acc = 100.0 * float(num_correct) / num_samples
-            if (t + 1) % 50 == 0:
+            if (t + 1) % 100 == 0:
                 print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.2f}%')
 
         acc = check_accuracy(net, val_loader)
@@ -51,7 +51,7 @@ def train(net, loss_fn, optimizer, scheduler, num_epochs=1, loader=None, val_loa
         if acc > best_acc:
             best_acc = acc
             print(f'Got current best_acc:{best_acc:.2f}%, Saving...')
-            save(net, 'vggnet3_1')
+            save(net, 'vggnet4')
         current_lr = optimizer.param_groups[0]['lr']
         print(f'current lr:{current_lr}')
         # adjust_learning_rate(optimizer, decay_rate=0.9)
@@ -97,10 +97,10 @@ def main(flag=True):
         train_datasets = TIN200Data('/data1')
         val_datasets = TIN200Data('/data1', 'val')
 
-        train_loader = data.DataLoader(train_datasets, batch_size=400, shuffle=True, num_workers=4)
-        val_loader = data.DataLoader(val_datasets, batch_size=400, num_workers=4)
+        train_loader = data.DataLoader(train_datasets, batch_size=200, shuffle=True, num_workers=4)
+        val_loader = data.DataLoader(val_datasets, batch_size=200, num_workers=4)
 
-        net = VGGNet3().cuda()
+        net = VGGNet4().cuda()
         cudnn.benchmark = True
 
         optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)

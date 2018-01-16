@@ -24,7 +24,7 @@ class VGGNet4(nn.Module):
             nn.BatchNorm2d(64)
         )
 
-        self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.pool1 = nn.MaxPool2d(kernel_size=4, stride=2, padding=1)
 
         self.conv2 = nn.Sequential(
             nn.Conv2d(64, 128, 3, padding=1),
@@ -38,7 +38,7 @@ class VGGNet4(nn.Module):
             nn.BatchNorm2d(128)
         )
 
-        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.pool2 = nn.MaxPool2d(kernel_size=4, stride=2, padding=1)
 
         self.conv3 = nn.Sequential(
             nn.Conv2d(128, 256, 3, padding=1),
@@ -64,7 +64,7 @@ class VGGNet4(nn.Module):
             nn.BatchNorm2d(512)
         )
 
-        self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.pool3 = nn.MaxPool2d(kernel_size=4, stride=2, padding=1)
 
         self.fcn = nn.Sequential(
             nn.Linear(512 * 8 * 8, 4096),
