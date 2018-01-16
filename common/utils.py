@@ -23,7 +23,7 @@ def save(net, name, state_dict=False):
     '''
     Save a network
     '''
-    assert isinstance(str, name), 'name must be a string'
+    assert isinstance(name, str), 'name must be a string'
     if state_dict:
         torch.save(net.state_dict(), pjoin('./saved_nets_dict', name + '.pkl'))
     else:
