@@ -99,9 +99,9 @@ class VGGNet3(nn.Module):
             nn.Conv2d(64, 64, 3, padding=1),
             nn.ReLU(),
             nn.BatchNorm2d(64),
-            nn.Conv2d(64, 64, 3, padding=1),
-            nn.ReLU(),
-            nn.BatchNorm2d(64)
+            # nn.Conv2d(64, 64, 3, padding=1),
+            # nn.ReLU(),
+            # nn.BatchNorm2d(64)
         )
 
         self.pool1 = nn.MaxPool2d(kernel_size=4, stride=2, padding=1)
@@ -113,9 +113,9 @@ class VGGNet3(nn.Module):
             nn.Conv2d(128, 128, 3, padding=1),
             nn.ReLU(),
             nn.BatchNorm2d(128),
-            nn.Conv2d(128, 128, 3, padding=1),
-            nn.ReLU(),
-            nn.BatchNorm2d(128)
+            # nn.Conv2d(128, 128, 3, padding=1),
+            # nn.ReLU(),
+            # nn.BatchNorm2d(128)
         )
 
         self.pool2 = nn.MaxPool2d(kernel_size=4, stride=2, padding=1)
