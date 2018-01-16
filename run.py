@@ -119,7 +119,7 @@ def adjust_learning_rate(optimizer, num_epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
     #lr = args.lr * (0.1 ** (epoch // 30))
     for param_group in optimizer.param_groups:
-        param_group['lr'] = param_group['lr']*(0.85 ** (num_epoch // 5))
+        param_group['lr'] = param_group['lr']*(0.85 ** (num_epoch // 20))
 
 
 def main():
@@ -150,7 +150,7 @@ def main():
     #optimizer = optim.Adam(params=net.parameters(), lr=7e-3, weight_decay = 4e-3)
 
     loss_fn = nn.CrossEntropyLoss()
-    num_epochs = 90
+    num_epochs = 100
     train(net, loss_fn, optimizer, num_epochs=num_epochs, loader=train_loader,val_loader = val_loader)
     #check_accuracy(net, val_loader)
 
