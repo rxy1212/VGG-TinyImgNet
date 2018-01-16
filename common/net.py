@@ -74,7 +74,7 @@ class VGGNet(nn.Module):
             nn.ReLU(),
             nn.Dropout(),
             nn.Linear(2048, 200, bias=False),
-            nn.Softmax(dim=1)
+            # nn.Softmax(dim=1)
         )
 
     def forward(self, x):
