@@ -26,7 +26,7 @@ import torchvision.models as models
 import torch.backends.cudnn as cudnn
 
 
-def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None):
+def train(model, loss_fn, optimizer, lr_schedule, num_epochs=1, loader=None, val_loader=None):
     num_correct = 0
     num_samples = 0
     best_val_acc = 0
@@ -56,11 +56,12 @@ def train(model, loss_fn, optimizer, num_epochs=1, loader=None, val_loader=None)
             loss.backward()
             optimizer.step()
         val_acc = check_accuracy(model, val_loader)
+        lr_schedule.step(val_acc, epoch=epoch + 1)
         if val_acc > best_val_acc:
             best_val_acc = val_acc
             print("saving net.....")
             save(model, True, True)
-        adjust_learning_rate(optimizer,epoch)
+        #adjust_learning_rate(optimizer,epoch)
         print('-------------------------------')
         print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
         print('-------------------------------')
@@ -145,22 +146,24 @@ def main():
     #net = DenseNet(64, 28, 0.4, 200, 64)
     #net = resnet18()
     #net = resnet50()
-    net = resnet101()
-    #net = resnet101(pretrained=True)
-    #net = resnet152()
+    #net = resnet34()
+    #net = resnet101()
+    net = resnet152()
     #net.cuda()
     if use_cuda:
         net.cuda()
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
-    optimizer = optim.SGD(params=net.parameters(), lr=0.1,
-                          momentum=0.9, weight_decay=5e-4, nesterov=True)
+    optimizer = optim.SGD(params=net.parameters(), lr=0.01,
+                          momentum=0.9, weight_decay=1e-4, nesterov=True)
     #optimizer = optim.Adam(params=net.parameters(), lr=0.1, weight_decay = 5e-3)
+    lr_schedule = optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, mode='max', verbose=True, patience=5)
 
     loss_fn = nn.CrossEntropyLoss()
 
-    train(net, loss_fn, optimizer, num_epochs=100,
+    train(net, loss_fn, optimizer,  lr_schedule, num_epochs=100,
           loader=train_loader, val_loader=val_loader)
     #check_accuracy(net, val_loader)
 
