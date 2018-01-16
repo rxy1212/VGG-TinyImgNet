@@ -290,4 +290,4 @@ class Inception(nn.Module):
         y2 = self.branch2(x)
         y3 = self.branch3(x)
         y4 = self.branch4(x)
-        return torch.cat([y1, y2, y3, y4], 3)
+        return torch.cat([y1, y2, y3, y4], 1)
