@@ -122,7 +122,7 @@ def adjust_learning_rate(optimizer, num_epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
     #lr = args.lr * (0.1 ** (epoch // 30))
     for param_group in optimizer.param_groups:
-        param_group['lr'] = param_group['lr']*(0.85 ** (num_epoch // 30))
+        param_group['lr'] = param_group['lr']*(0.1 ** (num_epoch // 30))
 
 
 def main():
@@ -143,8 +143,8 @@ def main():
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(48,16,0.5,200,64)
-    #net = densenet161()
-    net = densenet121()
+    net = densenet161()
+    #net = densenet121()
     #net.cuda()
     if use_cuda:
         net.cuda()
