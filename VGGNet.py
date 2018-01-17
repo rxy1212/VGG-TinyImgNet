@@ -161,8 +161,8 @@ def main():
     train_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='train')
     val_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='val')
 
-    train_loader = DataLoader(train_data, batch_size=100, shuffle=True, num_workers=2)
-    val_loader = DataLoader(val_data, batch_size=100, shuffle=True, num_workers=2)
+    train_loader = DataLoader(train_data, batch_size=128, shuffle=True, num_workers=2)
+    val_loader = DataLoader(val_data, batch_size=128, shuffle=True, num_workers=2)
 
     # model = Model().cuda()
     # model = Test_Model().cuda()
@@ -176,7 +176,7 @@ def main():
     loss_fn = nn.CrossEntropyLoss()
 
     scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=2, verbose=True)
-    num_epochs = 30
+    num_epochs = 50
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         train(model, loss_fn, optimizer, loader=train_loader)
