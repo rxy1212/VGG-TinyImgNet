@@ -163,7 +163,7 @@ def main():
 
     loss_fn = nn.CrossEntropyLoss()
 
-    train(net, loss_fn, optimizer,  lr_schedule, num_epochs=100,
+    train(net, loss_fn, optimizer,  lr_schedule, num_epochs=300,
           loader=train_loader, val_loader=val_loader)
     #check_accuracy(net, val_loader)
 
