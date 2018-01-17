@@ -61,7 +61,7 @@ class Transition(nn.Module):
 
 
 class DenseNet(nn.Module):
-    def __init__(self, growthRate, depth, reduction, nClasses, bottleneck):
+    def __init__(self, growthRate, depth, reduction, nClasses, bottleneck = True):
         super(DenseNet, self).__init__()
 
         nDenseBlocks = (depth - 4) // 3

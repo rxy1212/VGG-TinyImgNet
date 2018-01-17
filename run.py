@@ -144,9 +144,9 @@ def main():
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
-    #net = DenseNet(48,16,0.5,200,64)
+    net = DenseNet(32,64,0.5,200)
     #net = densenet161()
-    net = densenet169()
+    #net = densenet169()
     #net = densenet121()
     #net.cuda()
     if use_cuda:
