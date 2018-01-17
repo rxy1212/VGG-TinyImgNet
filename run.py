@@ -56,12 +56,12 @@ def train(model, loss_fn, optimizer, lr_schedule, num_epochs=1, loader=None, val
             loss.backward()
             optimizer.step()
         val_acc = check_accuracy(model,val_loader)
-        lr_schedule.step(val_acc, epoch=epoch+1)
+        #lr_schedule.step(val_acc, epoch=epoch+1)
         if val_acc > best_val_acc:
             best_val_acc = val_acc
             print("saving net.....")
             save(model, True, True)
-        #adjust_learning_rate(optimizer,epoch)
+        adjust_learning_rate(optimizer,epoch)
         print('-------------------------------')
         print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
         print('-------------------------------')
@@ -125,7 +125,7 @@ def adjust_learning_rate(optimizer, num_epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
     #lr = args.lr * (0.1 ** (epoch // 30))
     for param_group in optimizer.param_groups:
-        param_group['lr'] = param_group['lr']*(0.1 ** (num_epoch // 30))
+        param_group['lr'] = param_group['lr']*(0.1 ** (num_epoch // 20))
 
 
 def main():
