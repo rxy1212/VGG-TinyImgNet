@@ -137,14 +137,14 @@ def main():
     # test_datasets = TIN200Data(
     #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
 
-    train_loader = data.DataLoader(train_datasets, batch_size=128, shuffle=True, num_workers=4)
-    val_loader = data.DataLoader(val_datasets, batch_size=128, shuffle=True, num_workers=4)
+    train_loader = data.DataLoader(train_datasets, batch_size=256, shuffle=True, num_workers=4)
+    val_loader = data.DataLoader(val_datasets, batch_size=256, shuffle=True, num_workers=4)
 
     #net = VGGNet()
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
-    net = DenseNet(32,64,0.5,200)
+    net = DenseNet(32,28,0.5,200)
     #net = densenet161()
     #net = densenet169()
     #net = densenet121()
