@@ -25,7 +25,7 @@ def train(net, loss_fn, optimizer, scheduler, num_epochs=1, loader=None, val_loa
     num_samples = 0
     best_acc = 0
     for epoch in range(num_epochs):
-        print(fore.LIGHT_BLUE + f'Starting epoch {epoch + 1} / {num_epochs}')
+        print(fore.LIGHT_BLUE + f'Starting epoch {epoch + 1} / {num_epochs}' + fore.RESET)
         net.train()
         for t, (x, y) in enumerate(loader):
             optimizer.zero_grad()
@@ -51,7 +51,7 @@ def train(net, loss_fn, optimizer, scheduler, num_epochs=1, loader=None, val_loa
         print(f'last best_acc:{best_acc:.2f}%')
         if acc > best_acc:
             best_acc = acc
-            print(fore.LIGHT_BLUE + f'Got current best_acc:{best_acc:.2f}%, Saving...')
+            print(fore.LIGHT_BLUE + f'Got current best_acc:{best_acc:.2f}%, Saving...' + fore.RESET)
             save(net, 'vgg19')
         current_lr = optimizer.param_groups[0]['lr']
         print(f'current lr:{current_lr}')
