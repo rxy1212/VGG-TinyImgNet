@@ -147,9 +147,9 @@ def main():
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(32,28,0.5,200)
     #net = densenet161()
-    #net = densenet169()
+    net = densenet169()
     #net = densenet121()
-    net = densenet201()
+    #net = densenet201()
     #net.cuda()
     if use_cuda:
         net.cuda()
