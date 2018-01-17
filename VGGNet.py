@@ -121,7 +121,7 @@ def train(model, loss_fn, optimizer, num_epochs = 1, loader=None, val_loader=Non
     num_correct = 0
     num_samples = 0
     # scheduler = ExponentialLR(optimizer, 0.9)
-    scheduler = StepLR(optimizer, step_size=15, gamma=0.2)
+    scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         scheduler.step()
@@ -185,7 +185,7 @@ def main():
     optimizer = optim.SGD(params=model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(model, loss_fn, optimizer, num_epochs = 100, loader=train_loader, val_loader=val_loader)
+    train(model, loss_fn, optimizer, num_epochs = 50, loader=train_loader, val_loader=val_loader)
     torch.save(model.state_dict(),'./net_params/GoogleNet_net_params.pkl')
 
 
