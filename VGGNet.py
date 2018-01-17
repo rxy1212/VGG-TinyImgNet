@@ -9,8 +9,9 @@ from torch.utils.data import DataLoader
 from torch.utils.data import sampler
 import torchvision.transforms as T
 import torch.backends.cudnn as cudnn
-from torch.optim.lr_scheduler import ExponentialLR
-from torch.optim.lr_scheduler import StepLR
+# from torch.optim.lr_scheduler import ExponentialLR
+# from torch.optim.lr_scheduler import StepLR
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 from common.dataset import TIN200Data
 from common.net import Vgg19
 from common.net import Vgg11
@@ -117,33 +118,33 @@ class Test_Model(nn.Module):
         return x
 
 
-def train(model, loss_fn, optimizer, num_epochs = 1, loader=None, val_loader=None):
+def train(model, loss_fn, optimizer, loader=None):
     num_correct = 0
     num_samples = 0
     # scheduler = ExponentialLR(optimizer, 0.9)
-    scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
-    for epoch in range(num_epochs):
-        print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
-        scheduler.step()
-        model.train()
-        for t, (x, y) in enumerate(loader):
-            x_train = Variable(x.cuda())
-            y_train = Variable(y.cuda())
+    # scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
+    # for epoch in range(num_epochs):
+    #     print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
+    #     scheduler.step()
+    model.train()
+    for t, (x, y) in enumerate(loader):
+        x_train = Variable(x.cuda())
+        y_train = Variable(y.cuda())
 
-            scores = model(x_train)
-            loss = loss_fn(scores, y_train)
+        scores = model(x_train)
+        loss = loss_fn(scores, y_train)
 
-            _, preds = scores.data.cpu().max(1)
-            num_correct += (preds == y).sum()
-            num_samples += preds.size(0)
-            acc = float(num_correct) / num_samples
-            if (t + 1) % 200 == 0:
-                print('t = %d, loss = %.4f, acc = %.4f' % (t + 1, loss.data[0], acc))
+        _, preds = scores.data.cpu().max(1)
+        num_correct += (preds == y).sum()
+        num_samples += preds.size(0)
+        acc = float(num_correct) / num_samples
+        if (t + 1) % 200 == 0:
+            print('t = %d, loss = %.4f, acc = %.4f' % (t + 1, loss.data[0], acc))
 
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-        check_accuracy(model, val_loader)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+    # check_accuracy(model, val_loader)
 
 def check_accuracy(model, loader):
 
@@ -159,14 +160,13 @@ def check_accuracy(model, loader):
         _, preds = scores.data.cpu().max(1)
         val_correct += (preds == y).sum()
         val_samples += preds.size(0)
-        acc = float(val_correct) / val_samples
+    acc = float(val_correct) / val_samples
     print('Got %d / %d correct (%.2f)' % (val_correct, val_samples, 100 * acc))
-
+    return acc
 
 def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = "1"
     torch.cuda.is_available()
-    mytransform = T.ToTensor()
 
     train_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='train')
     val_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='val')
@@ -175,17 +175,24 @@ def main():
     val_loader = DataLoader(val_data, batch_size=64, shuffle=True, num_workers=2)
 
     # model = Model().cuda()
+    # model = Test_Model().cuda()
     # model = Vgg19().cuda()     # net model in the net.py
     # model = Vgg11().cuda()
     model = GoogleNet().cuda()
     cudnn.benchmark = True
-    # model = Test_Model().cuda()
 
     # model.load_state_dict(torch.load('./net_params/VGG11_net_params.pkl'))
     optimizer = optim.SGD(params=model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
-    train(model, loss_fn, optimizer, num_epochs = 50, loader=train_loader, val_loader=val_loader)
+    scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=3, verbose=True)
+    num_epochs = 50
+    for epoch in range(num_epochs):
+        print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
+        train(model, loss_fn, optimizer, loader=train_loader)
+        val_acc = check_accuracy(model, val_loader)
+        scheduler.step(val_acc, epoch=epoch+1)
+
     torch.save(model.state_dict(),'./net_params/GoogleNet_net_params.pkl')
 
 
