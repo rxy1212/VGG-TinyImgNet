@@ -135,17 +135,17 @@ def main():
     #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
 
     train_loader = data.DataLoader(
-        train_datasets, batch_size=640, shuffle=True, num_workers=5)
+        train_datasets, batch_size=512, shuffle=True, num_workers=5)
     val_loader = data.DataLoader(
-        val_datasets, batch_size=640, shuffle=True, num_workers=5)
+        val_datasets, batch_size=512, shuffle=True, num_workers=5)
 
     #net = VGGNet()
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(64, 28, 0.4, 200, 64)
-    #net = resnet18()
-    net = resnet50()
+    net = resnet18()
+    #net = resnet50()
     #net = resnet34()
     #net = resnet101()
     #net = resnet152()
