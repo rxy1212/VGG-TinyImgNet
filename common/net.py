@@ -216,21 +216,21 @@ class GoogleNet(nn.Module):
     def __init__(self):
         super(GoogleNet, self).__init__()
         self.pre_layer = nn.Sequential(
-                            nn.Conv2d(3, 64, kernel_size=3, padding=1),
-                            nn.BatchNorm2d(64),
+                            nn.Conv2d(3, 128, kernel_size=3, padding=1),
+                            nn.BatchNorm2d(128),
                             nn.ReLU(inplace=True),
-                            nn.MaxPool2d(3, stride=2, padding=1),    #shape 32x32x64
+                            nn.MaxPool2d(3, stride=2, padding=1),    #shape 32x32x128
                             )
         self.inception = nn.Sequential(
-                            Inception(64, 64, 128, 96, 32, 64, 32),
-                            Inception(256, 128, 128, 192, 32, 128, 64),
+                            Inception(128, 64, 96, 128, 64, 32, 32),
+                            Inception(256, 128, 128, 192, 64, 128, 64),
                             nn.MaxPool2d(3, stride=2, padding=1),    #shape 16x16x512
                             Inception(512, 160, 128, 192, 64, 128, 32),
-                            Inception(512, 256, 128, 256, 64, 128, 128),
-                            nn.AvgPool2d(3, stride=2),    #shape 7x7x768
+                            # Inception(512, 256, 128, 256, 64, 128, 128),
+                            nn.AvgPool2d(3, stride=2),    #shape 7x7x512
                             )
         self.fc = nn.Sequential(
-                        nn.Linear(7*7*768, 4096),
+                        nn.Linear(7*7*512, 4096),
                         nn.ReLU(),
                         nn.Dropout(),
                         nn.Linear(4096, 4096),

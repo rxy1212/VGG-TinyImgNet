@@ -1,4 +1,3 @@
-import numpy as np 
 import torch
 import os
 import torch.nn as nn
@@ -6,15 +5,12 @@ import torch.optim as optim
 import torch.utils.data as data
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
-from torch.utils.data import sampler
 import torchvision.transforms as T
 import torch.backends.cudnn as cudnn
-# from torch.optim.lr_scheduler import ExponentialLR
-# from torch.optim.lr_scheduler import StepLR
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from common.dataset import TIN200Data
-from common.net import Vgg19
-from common.net import Vgg11
+# from common.net import Vgg19
+# from common.net import Vgg11
 from common.net import GoogleNet
 
 gpu_type = torch.cuda.FloatTensor
@@ -121,11 +117,6 @@ class Test_Model(nn.Module):
 def train(model, loss_fn, optimizer, loader=None):
     num_correct = 0
     num_samples = 0
-    # scheduler = ExponentialLR(optimizer, 0.9)
-    # scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
-    # for epoch in range(num_epochs):
-    #     print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
-    #     scheduler.step()
     model.train()
     for t, (x, y) in enumerate(loader):
         x_train = Variable(x.cuda())
@@ -144,7 +135,6 @@ def train(model, loss_fn, optimizer, loader=None):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-    # check_accuracy(model, val_loader)
 
 def check_accuracy(model, loader):
 
@@ -182,11 +172,11 @@ def main():
     cudnn.benchmark = True
 
     # model.load_state_dict(torch.load('./net_params/VGG11_net_params.pkl'))
-    optimizer = optim.SGD(params=model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-06, nesterov=True)
+    optimizer = optim.SGD(params=model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-05, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
-    scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=3, verbose=True)
-    num_epochs = 50
+    scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=2, verbose=True)
+    num_epochs = 30
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         train(model, loss_fn, optimizer, loader=train_loader)
