@@ -42,7 +42,7 @@ def train(net, loss_fn, optimizer, scheduler, num_epochs=1, loader=None, val_loa
             num_correct += (preds == y).sum()
             num_samples += preds.size(0)
             acc = 100.0 * float(num_correct) / num_samples
-            if (t + 1) % 100 == 0:
+            if (t + 1) % 50 == 0:
                 print(f't = {t + 1}, loss = {loss.data[0]:.4f}, acc = {acc:.2f}%')
 
         acc = check_accuracy(net, val_loader)
@@ -91,20 +91,23 @@ def predict(net, name, loader):
 
 def main(flag=True):
     if flag:
-        os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+        os.environ["CUDA_VISIBLE_DEVICES"] = "0,3"
         torch.cuda.is_available()
 
         train_datasets = TIN200Data('/data1')
         val_datasets = TIN200Data('/data1', 'val')
 
-        train_loader = data.DataLoader(train_datasets, batch_size=200, shuffle=True, num_workers=4)
-        val_loader = data.DataLoader(val_datasets, batch_size=200, num_workers=4)
+        train_loader = data.DataLoader(train_datasets, batch_size=512, shuffle=True, num_workers=4)
+        val_loader = data.DataLoader(val_datasets, batch_size=512, num_workers=4)
 
         net = VGGNet4().cuda()
+        net = torch.nn.DataParallel(
+            net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
 
         optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
-        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', verbose=True, patience=5)
+        scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, mode='max', verbose=True, patience=5)
         loss_fn = nn.CrossEntropyLoss()
 
         train(net, loss_fn, optimizer, scheduler, num_epochs=300,
