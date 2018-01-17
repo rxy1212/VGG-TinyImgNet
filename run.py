@@ -159,7 +159,7 @@ def main():
     lr_schedule = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max',factor=0.2, verbose= True,patience=5)
 
     loss_fn = nn.CrossEntropyLoss()
-    num_epochs = 100
+    num_epochs = 200
     train(net, loss_fn, optimizer,lr_schedule, num_epochs=num_epochs, loader=train_loader,val_loader = val_loader)
     #check_accuracy(net, val_loader)
 
