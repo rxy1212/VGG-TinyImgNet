@@ -8,13 +8,14 @@
 '''
 
 import os
+from colored import fore
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data as data
 from torch.autograd import Variable
 import torch.backends.cudnn as cudnn
-from common.net import VGGNet4
+from common.net import VGG
 from common.dataset import TIN200Data
 from common.utils import *
 
@@ -24,7 +25,7 @@ def train(net, loss_fn, optimizer, scheduler, num_epochs=1, loader=None, val_loa
     num_samples = 0
     best_acc = 0
     for epoch in range(num_epochs):
-        print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
+        print(fore.LIGHT_BLUE + f'Starting epoch {epoch + 1} / {num_epochs}')
         net.train()
         for t, (x, y) in enumerate(loader):
             optimizer.zero_grad()
@@ -50,8 +51,8 @@ def train(net, loss_fn, optimizer, scheduler, num_epochs=1, loader=None, val_loa
         print(f'last best_acc:{best_acc:.2f}%')
         if acc > best_acc:
             best_acc = acc
-            print(f'Got current best_acc:{best_acc:.2f}%, Saving...')
-            save(net, 'vggnet4_1')
+            print(fore.LIGHT_BLUE + f'Got current best_acc:{best_acc:.2f}%, Saving...')
+            save(net, 'vgg19')
         current_lr = optimizer.param_groups[0]['lr']
         print(f'current lr:{current_lr}')
         # adjust_learning_rate(optimizer, decay_rate=0.9)
@@ -100,7 +101,7 @@ def main(flag=True):
         train_loader = data.DataLoader(train_datasets, batch_size=512, shuffle=True, num_workers=4)
         val_loader = data.DataLoader(val_datasets, batch_size=512, num_workers=4)
 
-        net = VGGNet4().cuda()
+        net = VGG().cuda()
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
