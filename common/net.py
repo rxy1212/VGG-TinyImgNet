@@ -13,13 +13,13 @@ class VGGNet4(nn.Module):
     def __init__(self):
         super(VGGNet4, self).__init__()
         self.conv1 = nn.Sequential(
-            nn.Conv2d(3, 64, 3, padding=1),
+            nn.Conv2d(3, 64, 3, padding=2, dilation=2),
             nn.ReLU(),
             nn.BatchNorm2d(64),
-            nn.Conv2d(64, 64, 3, padding=1),
+            nn.Conv2d(64, 64, 3, padding=2, dilation=2),
             nn.ReLU(),
             nn.BatchNorm2d(64),
-            nn.Conv2d(64, 64, 3, padding=1),
+            nn.Conv2d(64, 64, 3, padding=2, dilation=2),
             nn.ReLU(),
             nn.BatchNorm2d(64)
         )
@@ -27,13 +27,13 @@ class VGGNet4(nn.Module):
         self.pool1 = nn.MaxPool2d(kernel_size=4, stride=2, padding=1)
 
         self.conv2 = nn.Sequential(
-            nn.Conv2d(64, 128, 3, padding=1),
+            nn.Conv2d(64, 128, 3, padding=2, dilation=2),
             nn.ReLU(),
             nn.BatchNorm2d(128),
-            nn.Conv2d(128, 128, 3, padding=1),
+            nn.Conv2d(128, 128, 3, padding=2, dilation=2),
             nn.ReLU(),
             nn.BatchNorm2d(128),
-            nn.Conv2d(128, 128, 3, padding=1),
+            nn.Conv2d(128, 128, 3, padding=2, dilation=2),
             nn.ReLU(),
             nn.BatchNorm2d(128)
         )
@@ -41,25 +41,25 @@ class VGGNet4(nn.Module):
         self.pool2 = nn.MaxPool2d(kernel_size=4, stride=2, padding=1)
 
         self.conv3 = nn.Sequential(
-            nn.Conv2d(128, 256, 3, padding=1),
+            nn.Conv2d(128, 256, 3, padding=2, dilation=2),
             nn.ReLU(),
             nn.BatchNorm2d(256),
-            nn.Conv2d(256, 256, 3, padding=1),
+            nn.Conv2d(256, 256, 3, padding=2, dilation=2),
             nn.ReLU(),
             nn.BatchNorm2d(256),
-            nn.Conv2d(256, 256, 3, padding=1),
+            nn.Conv2d(256, 256, 3, padding=2, dilation=2),
             nn.ReLU(),
             nn.BatchNorm2d(256)
         )
 
         self.conv4 = nn.Sequential(
-            nn.Conv2d(256, 512, 3, padding=1),
+            nn.Conv2d(256, 512, 3, padding=2, dilation=2),
             nn.ReLU(),
             nn.BatchNorm2d(512),
-            nn.Conv2d(512, 512, 3, padding=1),
+            nn.Conv2d(512, 512, 3, padding=2, dilation=2),
             nn.ReLU(),
             nn.BatchNorm2d(512),
-            nn.Conv2d(512, 512, 3, padding=1),
+            nn.Conv2d(512, 512, 3, padding=2, dilation=2),
             nn.ReLU(),
             nn.BatchNorm2d(512)
         )
