@@ -177,18 +177,19 @@ def main():
 
     scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=3, verbose=True)
     best_acc = 0
-    num_epochs = 20
+    num_epochs = 30
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         train(model, loss_fn, optimizer, loader=train_loader)
         val_acc = check_accuracy(model, val_loader)
         if val_acc > best_acc:
             best_acc = val_acc
-        print('epoch:%d, best_acc:%.2f%%' % (epoch+1, best_acc*100))
+            best_epoch = epoch + 1
+        print('best_epoch:%d, best_acc:%.2f%%' % (best_epoch, best_acc*100))
         scheduler.step(val_acc, epoch=epoch+1)
 
     # torch.save(model.state_dict(),'./net_params/GoogleNet_net_params2.pkl')
-    torch.save(model, './net_params/GoogleNet.pkl')
+    torch.save(model, './net_params/GoogleNet1.pkl')
 
 
 if __name__ == '__main__':
