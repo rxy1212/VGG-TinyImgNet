@@ -147,8 +147,8 @@ def main():
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(32,28,0.5,200)
-    net = DenseNet(growth_rate=64,block_config=(12, 12, 24, 18))
-    #net = densenet161()
+    #net = DenseNet(growth_rate=64,block_config=(12, 12, 24, 18))
+    net = densenet161()
     #net = densenet169()
     #net = densenet121()
     #net = densenet201()
@@ -158,7 +158,7 @@ def main():
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
-    optimizer = optim.SGD(params=net.parameters(), lr=0.1, momentum=0.9,weight_decay= 1e-4, nesterov=True)
+    optimizer = optim.SGD(params=net.parameters(), lr=0.1, momentum=0.9,weight_decay= 5e-4, nesterov=True)
     #optimizer = optim.Adam(params=net.parameters(), lr=7e-3, weight_decay = 4e-3)
     lr_schedule = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max',factor=0.1, verbose= True,patience=10)
 
