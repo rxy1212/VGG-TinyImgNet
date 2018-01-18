@@ -161,8 +161,8 @@ def main():
     train_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='train')
     val_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='val')
 
-    train_loader = DataLoader(train_data, batch_size=128, shuffle=True, num_workers=2)
-    val_loader = DataLoader(val_data, batch_size=128, shuffle=True, num_workers=2)
+    train_loader = DataLoader(train_data, batch_size=256, shuffle=True, num_workers=2)
+    val_loader = DataLoader(val_data, batch_size=256, shuffle=True, num_workers=2)
 
     # model = Model().cuda()
     # model = Test_Model().cuda()
@@ -173,17 +173,18 @@ def main():
 
     # model.load_state_dict(torch.load('./net_params/VGG11_net_params.pkl'))
     optimizer = optim.SGD(params=model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-05, nesterov=True)
-    loss_fn = nn.CrossEntropyLoss()
+    # loss_fn = nn.CrossEntropyLoss()
+    loss_fn = nn.Softmax()
 
-    scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=2, verbose=True)
-    num_epochs = 50
+    scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=3, verbose=True)
+    num_epochs = 30
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         train(model, loss_fn, optimizer, loader=train_loader)
         val_acc = check_accuracy(model, val_loader)
         scheduler.step(val_acc, epoch=epoch+1)
 
-    torch.save(model.state_dict(),'./net_params/GoogleNet_net_params.pkl')
+    torch.save(model.state_dict(),'./net_params/GoogleNet_net_params1.pkl')
 
 
 if __name__ == '__main__':
