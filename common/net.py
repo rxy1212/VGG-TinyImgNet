@@ -232,14 +232,7 @@ class GoogleNet(nn.Module):
                             )
         self.fc = nn.Sequential(
                         nn.Linear(768, 200),
-                        nn.Softmax(),
-                        # nn.ReLU(),
-                        # nn.Dropout(),
-                        # nn.Linear(4096, 4096),
-                        # nn.ReLU(),
-                        # nn.Dropout(),
-                        # nn.Linear(4096, 200),
-                        )
+                            )
     def forward(self, x):
         x = self.pre_layer(x)
         x = self.inception(x)
@@ -274,6 +267,9 @@ class Inception(nn.Module):
                             nn.BatchNorm2d(n5x5b),
                             nn.ReLU(inplace=True),
                             nn.Conv2d(n5x5b, n5x5, kernel_size=3, padding=1),
+                            nn.BatchNorm2d(n5x5),
+                            nn.ReLU(inplace=True),
+                            nn.Conv2d(n5x5, n5x5, kernel_size=3, padding=1),
                             nn.BatchNorm2d(n5x5),
                             nn.ReLU(inplace=True),
                             )
