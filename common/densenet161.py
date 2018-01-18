@@ -110,8 +110,8 @@ class _Transition(nn.Sequential):
         self.add_module('conv', nn.Conv2d(num_input_features, num_output_features,
                                           kernel_size=1, stride=1, bias=False))
         #self.add_module('pool', nn.AvgPool2d(kernel_size=4, stride=2,padding=1))
-        self.add_module('pool', nn.MaxPool2d(
-            kernel_size=4, stride=2, padding=1))
+        #self.add_module('pool', nn.MaxPool2d(
+        #    kernel_size=4, stride=2, padding=1))
 
 
 class DenseNet(nn.Module):
@@ -139,7 +139,7 @@ class DenseNet(nn.Module):
                                 kernel_size=7, stride=2, padding=3, bias=False)),
             ('norm0', nn.BatchNorm2d(num_init_features)),
             ('relu0', nn.ReLU(inplace=True)),
-            ('pool0', nn.AvgPool2d(kernel_size=4, stride=2, padding=1)),
+            #('pool0', nn.AvgPool2d(kernel_size=3, stride=2, padding=1)),
         ]))
 
         # Each denseblock
@@ -153,18 +153,19 @@ class DenseNet(nn.Module):
                 trans = _Transition(
                     num_input_features=num_features, num_output_features=num_features // 2)
                 self.features.add_module('transition%d' % (i + 1), trans)
-                num_features = num_features // 2
+                #num_features = num_features // 2
 
         # Final batch norm
         self.features.add_module('norm5', nn.BatchNorm2d(num_features))
 
         # Linear layer
-        self.classifier = nn.Linear(num_features, num_classes)
+        self.classifier = nn.Linear(num_features*64*64, num_classes)
 
     def forward(self, x):
         features = self.features(x)
         out = F.relu(features, inplace=True)
-        out = F.max_pool2d(out, kernel_size=4, stride=1,padding =1).view(
-            features.size(0), -1)
+        #out = F.max_pool2d(out, kernel_size=4, stride=1,padding =1).view(
+        #    features.size(0), -1)
+        out = out.view(features.size(0), -1)
         out = self.classifier(out)
         return out
