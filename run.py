@@ -14,11 +14,12 @@ import torch.optim as optim
 import torch.utils.data as data
 from torch.autograd import Variable
 from common.net import VGGNet
-from common.densenet import DenseNet
+#from common.densenet import DenseNet
 from common.densenet161 import densenet161
 from common.densenet161 import densenet169
 from common.densenet161 import densenet121
 from common.densenet161 import densenet201
+from common.densenet161 import DenseNet
 from common.dataset import TIN200Data
 from common.utils import localtime, save
 import torchvision.models as models
@@ -146,7 +147,8 @@ def main():
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(32,28,0.5,200)
-    net = densenet161()
+    net = DenseNet(growth_rate=64,block_config=(24, 12, 24, 18))
+    #net = densenet161()
     #net = densenet169()
     #net = densenet121()
     #net = densenet201()
