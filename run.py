@@ -147,7 +147,7 @@ def main():
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(32,28,0.5,200)
-    net = DenseNet(growth_rate=64,block_config=(24, 12, 24, 18))
+    net = DenseNet(growth_rate=64,block_config=(12, 12, 24, 18))
     #net = densenet161()
     #net = densenet169()
     #net = densenet121()
