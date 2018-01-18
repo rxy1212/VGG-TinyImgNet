@@ -173,8 +173,7 @@ def main():
 
     # model.load_state_dict(torch.load('./net_params/VGG11_net_params.pkl'))
     optimizer = optim.SGD(params=model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-05, nesterov=True)
-    # loss_fn = nn.CrossEntropyLoss()
-    loss_fn = nn.Softmax()
+    loss_fn = nn.CrossEntropyLoss()
 
     scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=3, verbose=True)
     num_epochs = 30
