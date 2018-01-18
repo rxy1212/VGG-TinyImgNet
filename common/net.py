@@ -232,6 +232,7 @@ class GoogleNet(nn.Module):
                             )
         self.fc = nn.Sequential(
                         nn.Linear(768, 200),
+                        nn.Softmax(),
                         # nn.ReLU(),
                         # nn.Dropout(),
                         # nn.Linear(4096, 4096),
