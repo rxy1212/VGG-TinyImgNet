@@ -159,13 +159,12 @@ class DenseNet(nn.Module):
         self.features.add_module('norm5', nn.BatchNorm2d(num_features))
 
         # Linear layer
-        self.classifier = nn.Linear(num_features*16*16, num_classes)
+        self.classifier = nn.Linear(num_features*8*8, num_classes)
 
     def forward(self, x):
         features = self.features(x)
         out = F.relu(features, inplace=True)
-        out = F.max_pool2d(out, kernel_size=6, stride=4, padding =1).view(
-            features.size(0), -1)
+        out = F.max_pool2d(out, kernel_size=6, stride=4, padding =1).view(features.size(0), -1)
         #out = out.view(features.size(0), -1)
         out = self.classifier(out)
         return out
