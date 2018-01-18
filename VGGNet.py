@@ -184,7 +184,7 @@ def main():
         val_acc = check_accuracy(model, val_loader)
         if val_acc > best_acc:
             best_acc = val_acc
-        print('epoch:d%, best_acc:%.2f%%' % (epoch+1, best_acc*100))
+        print('epoch:%d, best_acc:%.2f%%' % (epoch+1, best_acc*100))
         scheduler.step(val_acc, epoch=epoch+1)
 
     # torch.save(model.state_dict(),'./net_params/GoogleNet_net_params2.pkl')
