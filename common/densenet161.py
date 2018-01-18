@@ -83,7 +83,7 @@ class _DenseLayer(nn.Sequential):
         self.add_module('relu.2', nn.ReLU(inplace=True)),
         self.add_module('conv.2', nn.Conv2d(bn_size * growth_rate, growth_rate,
                                             kernel_size=3, stride=1, padding=1, bias=False)),
-        self.drop_rate = drop_rate
+        self.drop_rate = drop_rate #params for dropout 
 
     def forward(self, x):
         new_features = super(_DenseLayer, self).forward(x)
@@ -129,7 +129,7 @@ class DenseNet(nn.Module):
     """
 
     def __init__(self, growth_rate=32, block_config=(6, 12, 24, 16),
-                 num_init_features=64, bn_size=4, drop_rate=0, num_classes=200):
+                 num_init_features=64, bn_size=4, drop_rate=0.5, num_classes=200):
 
         super(DenseNet, self).__init__()
 
