@@ -183,7 +183,7 @@ def main():
         val_acc = check_accuracy(model, val_loader)
         scheduler.step(val_acc, epoch=epoch+1)
 
-    torch.save(model.state_dict(),'./net_params/GoogleNet_net_params1.pkl')
+    torch.save(model.state_dict(),'./net_params/GoogleNet_net_params2.pkl')
 
 
 if __name__ == '__main__':
