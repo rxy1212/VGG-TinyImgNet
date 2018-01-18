@@ -172,18 +172,23 @@ def main():
     cudnn.benchmark = True
 
     # model.load_state_dict(torch.load('./net_params/VGG11_net_params.pkl'))
-    optimizer = optim.SGD(params=model.parameters(), lr=0.05, momentum=0.9, weight_decay=1e-05, nesterov=True)
+    optimizer = optim.SGD(params=model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-06, nesterov=True)
     loss_fn = nn.CrossEntropyLoss()
 
     scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=3, verbose=True)
-    num_epochs = 100
+    best_acc = 0
+    num_epochs = 50
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         train(model, loss_fn, optimizer, loader=train_loader)
         val_acc = check_accuracy(model, val_loader)
+        if val_acc > best_acc:
+            best_acc = val_acc
+        print('best_acc:%.2f%%' % best_acc*100)
         scheduler.step(val_acc, epoch=epoch+1)
 
-    torch.save(model.state_dict(),'./net_params/GoogleNet_net_params2.pkl')
+    # torch.save(model.state_dict(),'./net_params/GoogleNet_net_params2.pkl')
+    torch.save(model, './net_params/GoogleNet.pkl')
 
 
 if __name__ == '__main__':
