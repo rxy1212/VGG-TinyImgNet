@@ -226,8 +226,9 @@ class GoogleNet(nn.Module):
                             Inception(288, 64, 96, 128, 32, 64, 64),
                             nn.MaxPool2d(3, stride=2, padding=1),    #shape 16x16x256
                             Inception(320, 128, 128, 192, 64, 128, 64),
-                            Inception(512, 160, 128, 192, 64, 128, 32),
+                            Inception(512, 128, 128, 192, 64, 128, 64),
                             nn.MaxPool2d(3, stride=2, padding=1),    #shape 8x8x512
+                            Inception(512, 128, 128, 192, 64, 128, 64),
                             Inception(512, 256, 128, 256, 64, 128, 128),
                             Inception(768, 320, 128, 320, 128, 256, 128),
                             nn.AvgPool2d(8, stride=1),    #shape 1x1x1024
