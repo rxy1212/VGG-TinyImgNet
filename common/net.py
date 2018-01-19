@@ -8,7 +8,13 @@
 '''
 
 import torch.nn as nn
+import torch.nn.init as init
 import torch
+
+def weights_init(m):
+    if isinstance(m, nn.Conv2d):
+        xavier(m.weight.data)
+        xavier(m.bias.data)
 
 class VGGNet(nn.Module):
     def __init__(self):
@@ -221,6 +227,8 @@ class GoogleNet(nn.Module):
                             nn.ReLU(inplace=True),
                             nn.MaxPool2d(3, stride=2, padding=1),    #shape 32x32x256
                             )
+        self.pre_layer.apply(weights_init)
+
         self.inception = nn.Sequential(
                             Inception(256, 64, 96, 128, 32, 64, 32),
                             Inception(288, 64, 96, 128, 32, 64, 64),

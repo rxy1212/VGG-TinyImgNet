@@ -15,7 +15,6 @@ from common.dataset import TIN200Data
 from common.net import GoogleNet
 
 gpu_type = torch.cuda.FloatTensor
-cur_time = datetime.datetime.now()
 
 class Flatten(nn.Module):
     def forward(self, x):
@@ -153,7 +152,7 @@ def check_accuracy(model, loader):
         val_correct += (preds == y).sum()
         val_samples += preds.size(0)
     acc = float(val_correct) / val_samples
-    print('Got %d / %d correct %.2f%%' % (val_correct, val_samples, 100 * acc))
+    print('Got %d / %d correct acc:(%.2f)%%' % (val_correct, val_samples, 100 * acc))
     return acc
 
 def main():
@@ -174,11 +173,11 @@ def main():
     cudnn.benchmark = True
 
     # model.load_state_dict(torch.load('./net_params/VGG11_net_params.pkl'))
-    optimizer = optim.SGD(params=model.parameters(), lr=0.05, momentum=0.9, weight_decay=1e-05, nesterov=True)
+    optimizer = optim.SGD(params=model.parameters(), lr=0.005, momentum=0.9, weight_decay=1e-05, nesterov=True)
     # optimizer = optim.Adam(params=model.parameters(), lr=0.05, eps=1e-08, weight_decay=1e-05)
     loss_fn = nn.CrossEntropyLoss()
 
-    scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=3, verbose=True)
+    scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=2, verbose=True)
     best_acc = 0
     num_epochs = 50
     for epoch in range(num_epochs):
@@ -188,7 +187,8 @@ def main():
         if val_acc > best_acc:
             best_acc = val_acc
             best_epoch = epoch + 1
-        print('best_epoch:%d best_acc:%.2f%% time:%s' % (best_epoch, best_acc*100, cur_time))
+        cur_time = datetime.datetime.now()
+        print('best_epoch:%d  best_acc:(%.2f)%%  time:%s' % (best_epoch, best_acc*100, cur_time))
         scheduler.step(val_acc, epoch=epoch+1)
 
     # torch.save(model.state_dict(),'./net_params/GoogleNet_net_params2.pkl')
