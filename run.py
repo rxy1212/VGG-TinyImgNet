@@ -28,13 +28,14 @@ import torch.backends.cudnn as cudnn
 
 
 def train(model, loss_fn, optimizer, lr_schedule, num_epochs=1, loader=None, val_loader = None):
-    num_correct = 0
-    num_samples = 0
+    
     best_val_acc = 0
     acc = 0
     val_acc = 0
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
+        num_correct = 0
+        num_samples = 0
         model.train()
         for t, (x, y) in enumerate(loader):
             x_train = Variable(x.cuda())
