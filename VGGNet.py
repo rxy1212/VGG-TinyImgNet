@@ -196,7 +196,7 @@ def main():
             best_epoch = epoch + 1
         cur_time = datetime.datetime.now()
         print('best_epoch:%d  best_acc:(%.2f)%%  time:%s' % (best_epoch, best_acc*100, cur_time))
-        print('/n')
+        print('\n')
         scheduler.step(val_acc, epoch=epoch+1)
 
     # torch.save(model.state_dict(),'./net_params/GoogleNet_net_params2.pkl')
