@@ -131,7 +131,7 @@ def adjust_learning_rate(optimizer, num_epoch):
 
 
 def main():
-    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "2"
     use_cuda = torch.cuda.is_available()
     
     train_datasets = TIN200Data('/data1')
@@ -159,7 +159,7 @@ def main():
         net = torch.nn.DataParallel(
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
-    optimizer = optim.SGD(params=net.parameters(), lr=0.01, momentum=0.9,weight_decay= 5e-4, nesterov=True)
+    optimizer = optim.SGD(params=net.parameters(), lr=0.1, momentum=0.9,weight_decay= 5e-4, nesterov=True)
     #optimizer = optim.Adam(params=net.parameters(), lr=7e-3, weight_decay = 4e-3)
     lr_schedule = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max',factor=0.4, verbose= True,patience=5)
 
