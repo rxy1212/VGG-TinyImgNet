@@ -24,8 +24,8 @@ class Flatten(nn.Module):
 
 def weights_init(m):
     if isinstance(m, nn.Conv2d):
-        init.xavier_uniform(m.weight.data)
-        init.constant(m.bias.data, 0.3)
+        init.xavier_normal(m.weight.data)
+        init.constant(m.bias.data, 0.2)
 
 class Model(nn.Module):
     def __init__(self):
@@ -180,7 +180,7 @@ def main():
     cudnn.benchmark = True
 
     # model.load_state_dict(torch.load('./net_params/VGG11_net_params.pkl'))
-    optimizer = optim.SGD(params=model.parameters(), lr=0.005, momentum=0.9, weight_decay=1e-05, nesterov=True)
+    optimizer = optim.SGD(params=model.parameters(), lr=0.02, momentum=0.9, weight_decay=1e-06, nesterov=True)
     # optimizer = optim.Adam(params=model.parameters(), lr=0.05, eps=1e-08, weight_decay=1e-05)
     loss_fn = nn.CrossEntropyLoss()
 
