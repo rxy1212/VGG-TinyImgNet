@@ -14,7 +14,7 @@ import torch
 def weights_init(m):
     if isinstance(m, nn.Conv2d):
         init.xavier_uniform(m.weight.data)
-        init.xavier_uniform(m.bias.data)
+        init.constant(m.bias.data)
 
 class VGGNet(nn.Module):
     def __init__(self):
