@@ -2,6 +2,7 @@ import torch
 import os
 import datetime
 import torch.nn as nn
+import torch.nn.init as init
 import torch.optim as optim
 import torch.utils.data as data
 from torch.autograd import Variable
@@ -20,6 +21,11 @@ class Flatten(nn.Module):
     def forward(self, x):
         N, C, H, W = x.size()
         return x.view(N, -1)
+
+def weights_init(m):
+    if isinstance(m, nn.Conv2d):
+        init.xavier_uniform(m.weight.data)
+        init.constant(m.bias.data, 0.3)
 
 class Model(nn.Module):
     def __init__(self):
@@ -170,6 +176,7 @@ def main():
     # model = Vgg19().cuda()     # net model in the net.py
     # model = Vgg11().cuda()
     model = GoogleNet().cuda()
+    model.apply(weights_init) 
     cudnn.benchmark = True
 
     # model.load_state_dict(torch.load('./net_params/VGG11_net_params.pkl'))
@@ -189,10 +196,11 @@ def main():
             best_epoch = epoch + 1
         cur_time = datetime.datetime.now()
         print('best_epoch:%d  best_acc:(%.2f)%%  time:%s' % (best_epoch, best_acc*100, cur_time))
+        print('/n')
         scheduler.step(val_acc, epoch=epoch+1)
 
     # torch.save(model.state_dict(),'./net_params/GoogleNet_net_params2.pkl')
-    torch.save(model, './net_params/GoogleNet1.pkl')
+    torch.save(model, './net_params/GoogleNet.pkl')
 
 
 if __name__ == '__main__':
