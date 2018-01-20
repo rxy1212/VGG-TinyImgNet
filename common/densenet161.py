@@ -139,7 +139,7 @@ class DenseNet(nn.Module):
                                 kernel_size=7, stride=2, padding=3, bias=False)),
             ('norm0', nn.BatchNorm2d(num_init_features)),
             ('relu0', nn.ReLU(inplace=True)),
-            ('pool0', nn.AvgPool2d(kernel_size=3, stride=1, padding=1)),
+            ('pool0', nn.MaxPool2d(kernel_size=4, stride=2, padding=1)),
         ]))
 
         # Each denseblock
@@ -164,7 +164,7 @@ class DenseNet(nn.Module):
     def forward(self, x):
         features = self.features(x)
         out = F.relu(features, inplace=True)
-        out = F.max_pool2d(out, kernel_size=3, stride=2, padding =1).view(features.size(0), -1)
+        out = F.avg_pool2d(out, kernel_size=4, stride=1, padding =1).view(features.size(0), -1)
         #out = out.view(features.size(0), -1)
         out = self.classifier(out)
         return out
