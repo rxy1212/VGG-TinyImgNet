@@ -159,7 +159,7 @@ def main():
                           momentum=0.9, weight_decay=5e-4, nesterov=True)
     #optimizer = optim.Adam(params=net.parameters(), lr=0.1, weight_decay = 5e-3)
     lr_schedule = optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, mode='max', factor=0.2, verbose=True, patience=5)
+        optimizer, mode='max', factor=0.3, verbose=True, patience=5)
 
     loss_fn = nn.CrossEntropyLoss()
 
