@@ -131,7 +131,7 @@ def adjust_learning_rate(optimizer, num_epoch):
 
 
 def main():
-    os.environ["CUDA_VISIBLE_DEVICES"] = "1,2"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "2,3"
     use_cuda = torch.cuda.is_available()
     
     train_datasets = TIN200Data('/data1')
