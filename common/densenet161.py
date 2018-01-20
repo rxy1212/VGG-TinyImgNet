@@ -131,8 +131,8 @@ class DenseNet(nn.Module):
     #def __init__(self, growth_rate=32, block_config=(6, 12, 24, 16),
     #             num_init_features=64, bn_size=3, drop_rate=0, num_classes=200):
 
-    def __init__(self, growth_rate=32, block_config=(6, 12, 24),
-                 num_init_features=64, bn_size=3, drop_rate=0, num_classes=200):
+    def __init__(self, growth_rate=32, block_config=(6, 12, 24, 16, 16),
+                 num_init_features=64, bn_size=5, drop_rate=0, num_classes=200):
 
         super(DenseNet, self).__init__()
 
@@ -142,7 +142,7 @@ class DenseNet(nn.Module):
                                 kernel_size=7, stride=2, padding=3, bias=False)),
             ('norm0', nn.BatchNorm2d(num_init_features)),
             ('relu0', nn.ReLU(inplace=True)),
-            ('pool0', nn.MaxPool2d(kernel_size=3, stride=2,padding=1)),
+            ('pool0', nn.MaxPool2d(kernel_size=3, stride=1, padding=1)),
         ]))
 
         # Each denseblock
@@ -167,7 +167,7 @@ class DenseNet(nn.Module):
     def forward(self, x):
         features = self.features(x)
         out = F.relu(features, inplace=True)
-        out = F.avg_pool2d(out, kernel_size=2, stride=2).view(features.size(0), -1)
-        #out = out.view(features.size(0), -1)
+        #out = F.avg_pool2d(out, kernel_size=2, stride=2).view(features.size(0), -1)
+        out = out.view(features.size(0), -1)
         out = self.classifier(out)
         return out
