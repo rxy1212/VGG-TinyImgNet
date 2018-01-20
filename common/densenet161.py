@@ -111,7 +111,7 @@ class _Transition(nn.Sequential):
                                           kernel_size=1, stride=1, bias=False))
         self.add_module('pool', nn.AvgPool2d(kernel_size=4, stride=2,padding=1))
         #self.add_module('pool', nn.MaxPool2d(
-            kernel_size=4, stride=2, padding=1))
+        #    kernel_size=4, stride=2, padding=1))
 
 
 class DenseNet(nn.Module):
