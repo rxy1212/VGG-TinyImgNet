@@ -131,7 +131,7 @@ def adjust_learning_rate(optimizer, num_epoch):
 
 
 def main():
-    os.environ["CUDA_VISIBLE_DEVICES"] = "1,3"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
     use_cuda = torch.cuda.is_available()
     
     train_datasets = TIN200Data('/data1')
@@ -148,7 +148,7 @@ def main():
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(32,28,0.5,200)
-    net = DenseNet(growth_rate=64)
+    net = DenseNet(growth_rate=32)
     #net = densenet161()
     #net = densenet169()
     #net = densenet121()
