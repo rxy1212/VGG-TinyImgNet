@@ -142,7 +142,7 @@ class DenseNet(nn.Module):
                                 kernel_size=7, stride=2, padding=3, bias=False)),
             ('norm0', nn.BatchNorm2d(num_init_features)),
             ('relu0', nn.ReLU(inplace=True)),
-            ('pool0', nn.MaxPool2d(kernel_size=43, stride=2, padding=1)),
+            ('pool0', nn.MaxPool2d(kernel_size=4, stride=2, padding=1)),
         ]))
 
         # Each denseblock
