@@ -109,8 +109,8 @@ class _Transition(nn.Sequential):
         self.add_module('relu', nn.ReLU(inplace=True))
         self.add_module('conv', nn.Conv2d(num_input_features, num_output_features,
                                           kernel_size=1, stride=1, bias=False))
-        #self.add_module('pool', nn.AvgPool2d(kernel_size=4, stride=2,padding=1))
-        self.add_module('pool', nn.MaxPool2d(
+        self.add_module('pool', nn.AvgPool2d(kernel_size=4, stride=2,padding=1))
+        #self.add_module('pool', nn.MaxPool2d(
             kernel_size=4, stride=2, padding=1))
 
 
