@@ -184,9 +184,9 @@ def main():
     # optimizer = optim.Adam(params=model.parameters(), lr=0.05, eps=1e-08, weight_decay=1e-05)
     loss_fn = nn.CrossEntropyLoss()
 
-    scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=2, verbose=True)
+    scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=3, verbose=True)
     best_acc = 0
-    num_epochs = 30
+    num_epochs = 100
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         train(model, loss_fn, optimizer, loader=train_loader)
