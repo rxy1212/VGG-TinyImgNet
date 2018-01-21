@@ -258,7 +258,7 @@ class GoogleNet(nn.Module):
                             )
         self.fc = nn.Sequential(
                         nn.Linear(1024, 200),
-
+                        )
     def forward(self, x):
         x = self.pre_layer(x)
         x = self.inception(x)
