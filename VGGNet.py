@@ -168,8 +168,8 @@ def main():
     train_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='train')
     val_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='val')
 
-    train_loader = DataLoader(train_data, batch_size=16, shuffle=True, num_workers=2)
-    val_loader = DataLoader(val_data, batch_size=16, shuffle=True, num_workers=2)
+    train_loader = DataLoader(train_data, batch_size=64, shuffle=True, num_workers=2)
+    val_loader = DataLoader(val_data, batch_size=64, shuffle=True, num_workers=2)
 
     # model = Model().cuda()
     # model = Test_Model().cuda()
