@@ -149,7 +149,7 @@ def main():
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(32,28,0.5,200)
     #net = DenseNet(growth_rate=64,block_config=(6, 12, 36),bn_size=3)
-    #net = DenseNet(block_config=(6, 12, 24, 24, 16),bn_size=5)
+    net = DenseNet(block_config=(6, 12, 24, 24, 16),bn_size=5)
 
     #net = densenet161()
     #net = densenet169()
