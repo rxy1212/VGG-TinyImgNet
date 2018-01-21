@@ -127,7 +127,7 @@ def adjust_learning_rate(optimizer, num_epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
     #lr = args.lr * (0.1 ** (epoch // 30))
     for param_group in optimizer.param_groups:
-        param_group['lr'] = param_group['lr']*(0.9 ** (num_epoch // 5))
+        param_group['lr'] = param_group['lr']*(0.1 ** (num_epoch //90))
 
 
 def main():
@@ -140,16 +140,16 @@ def main():
     # test_datasets = TIN200Data(
     #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
 
-    train_loader = data.DataLoader(train_datasets, batch_size=500, shuffle=True, num_workers=4)
-    val_loader = data.DataLoader(val_datasets, batch_size=500, shuffle=True, num_workers=4)
+    train_loader = data.DataLoader(train_datasets, batch_size=128, shuffle=True, num_workers=4)
+    val_loader = data.DataLoader(val_datasets, batch_size=128, shuffle=True, num_workers=4)
 
     #net = VGGNet()
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(32,28,0.5,200)
-    net = DenseNet(growth_rate=64,block_config=(6, 12, 24),bn_size=3)
-    #net = DenseNet(block_config=(6, 12, 24, 24, 16),bn_size=5)
+    #net = DenseNet(growth_rate=64,block_config=(6, 12, 24),bn_size=3)
+    net = DenseNet(growth_rate=48, block_config=(6, 12, 36, 24), drop_rate=0.2)
 
     #net = densenet161()
     #net = densenet169()
