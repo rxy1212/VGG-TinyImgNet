@@ -128,11 +128,11 @@ class DenseNet(nn.Module):
         num_classes (int) - number of classification classes
     """
 
-    #def __init__(self, growth_rate=32, block_config=(6, 12, 24, 16),
-    #             num_init_features=64, bn_size=3, drop_rate=0, num_classes=200):
+    def __init__(self, growth_rate=32, block_config=(6, 12, 24, 16),
+                 num_init_features=64, bn_size=4, drop_rate=0, num_classes=200):
 
-    def __init__(self, growth_rate=32, block_config=(6, 12, 24, 16, 16),
-                 num_init_features=64, bn_size=5, drop_rate=0, num_classes=200):
+    #def __init__(self, growth_rate=32, block_config=(6, 12, 24, 16, 16),
+    #             num_init_features=64, bn_size=5, drop_rate=0, num_classes=200):
 
         super(DenseNet, self).__init__()
 
@@ -162,7 +162,8 @@ class DenseNet(nn.Module):
         self.features.add_module('norm5', nn.BatchNorm2d(num_features))
 
         # Linear layer
-        self.classifier = nn.Linear(num_features*2*2, num_classes)
+        self.classifier = nn.Linear(num_features, num_classes)
+        #self.classifier = nn.Linear(num_features*2*2, num_classes)
         #self.classifier = nn.Linear(num_features * 4 * 4, num_classes)
 
 
