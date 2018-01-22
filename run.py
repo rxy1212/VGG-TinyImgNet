@@ -154,7 +154,7 @@ def main():
     #net = densenet161()
     #net = densenet169()
     #net = densenet121()
-    #net = densenet201()
+    net = densenet201()
     #net.cuda()
     if use_cuda:
         net.cuda()
