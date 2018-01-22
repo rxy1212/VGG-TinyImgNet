@@ -254,11 +254,12 @@ class GoogleNet(nn.Module):
                             nn.MaxPool2d(3, stride=2, padding=1),    #shape 8x8x512
                             Inception(1024, 320, 128, 320, 128, 256, 128),
                             Inception(1024, 320, 128, 320, 128, 256, 128),
-                            nn.AvgPool2d(8, stride=1),    #shape 1x1x1024
+                            Inception(1024, 512, 256, 512, 128, 320, 256),
+                            nn.AvgPool2d(8, stride=1),    #shape 1x1x1600
                             )
         self.fc = nn.Sequential(
-                        nn.Linear(1024, 200),
-                        )
+                        nn.Linear(1600, 200),
+                            )
     def forward(self, x):
         x = self.pre_layer(x)
         x = self.inception(x)
