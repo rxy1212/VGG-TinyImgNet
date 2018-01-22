@@ -186,7 +186,7 @@ def main():
 
     scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=3, verbose=True)
     best_acc = 0
-    num_epochs = 100
+    num_epochs = 50
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         train(model, loss_fn, optimizer, loader=train_loader)
