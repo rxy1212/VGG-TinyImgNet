@@ -160,7 +160,7 @@ def main():
     net = densenet161()
 
     #提取fc层中固定的参数
-    fc_features = densnet.fc.in_features
+    fc_features = densnet.classifier.in_features
     #修改类别为9
     densnet.fc = nn.Linear(fc_features, 200)
 
