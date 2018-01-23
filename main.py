@@ -147,7 +147,7 @@ def main():
     #net = resnet18()
     #net = resnet50()
     #net = resnet34()
-    net = resnet101()
+    net = resnet101(Bottleneck, [3, 4, 23, 3],num_classes=200)
     #net = resnet152()
     #net.cuda()
 
