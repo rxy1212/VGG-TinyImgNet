@@ -156,6 +156,7 @@ def main():
     #net = densenet121()
     #net = densenet201(growth_rate = 64)
     #net.cuda()
+
     if use_cuda:
         net.cuda()
         net = torch.nn.DataParallel(
