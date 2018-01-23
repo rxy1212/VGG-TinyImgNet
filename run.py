@@ -140,15 +140,15 @@ def main():
     # test_datasets = TIN200Data(
     #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
 
-    train_loader = data.DataLoader(train_datasets, batch_size=256, shuffle=True, num_workers=4)
-    val_loader = data.DataLoader(val_datasets, batch_size=256, shuffle=True, num_workers=4)
+    train_loader = data.DataLoader(train_datasets, batch_size=512, shuffle=True, num_workers=4)
+    val_loader = data.DataLoader(val_datasets, batch_size=512, shuffle=True, num_workers=4)
 
     #net = VGGNet()
     #net = models.resnet18()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(32,28,0.5,200)
-    net = DenseNet(growth_rate=64,block_config=(6, 12, 24),bn_size=3)
+    #net = DenseNet(growth_rate=64,block_config=(6, 12, 24),bn_size=3)
     #net = DenseNet(growth_rate=48, block_config=(6, 12, 36, 24), drop_rate=0.2)
 
     #net = densenet161()
@@ -156,6 +156,27 @@ def main():
     #net = densenet121()
     #net = densenet201(growth_rate = 64)
     #net.cuda()
+    densnet = models.densenet161(pretrained=True)
+    net = densenet161()
+
+    #提取fc层中固定的参数
+    fc_features = densnet.fc.in_features
+    #修改类别为9
+    densnet.fc = nn.Linear(fc_features, 200)
+
+    #读取参数
+    pretrained_dict = densnet.state_dict()
+    model_dict = net.state_dict()
+
+    # 将pretrained_dict里不属于model_dict的键剔除掉
+    pretrained_dict = {k: v for k,
+                       v in pretrained_dict.items() if k in model_dict}
+
+    # 更新现有的model_dict
+    model_dict.update(pretrained_dict)
+
+    # 加载我们真正需要的state_dict
+    net.load_state_dict(model_dict)
 
     if use_cuda:
         net.cuda()
