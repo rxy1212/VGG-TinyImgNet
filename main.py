@@ -171,9 +171,9 @@ def main():
     model_dict.update(pretrained_dict)
     # 加载我们真正需要的state_dict
     net.load_state_dict(model_dict)
-    fc_features = net.fc.in_features
+    #fc_features = net.fc.in_features
     #修改类别为9
-    net.fc = nn.Linear(fc_features, 200)
+    #net.fc = nn.Linear(fc_features, 200)
     if use_cuda:
         net.cuda()
         net = torch.nn.DataParallel(
