@@ -58,12 +58,12 @@ def train(model, loss_fn, optimizer, lr_schedule, num_epochs=1, loader=None, val
             loss.backward()
             optimizer.step()
         val_acc = check_accuracy(model,val_loader)
-        #lr_schedule.step(val_acc, epoch=epoch+1)
+        lr_schedule.step(val_acc, epoch=epoch+1)
         if val_acc > best_val_acc:
             best_val_acc = val_acc
             print("saving net.....")
             save(model, True, True)
-        adjust_learning_rate(optimizer,epoch)
+        #adjust_learning_rate(optimizer,epoch)
         print('-------------------------------')
         print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
         print('-------------------------------')
@@ -163,7 +163,7 @@ def main():
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
     
-    lr = 0.1
+    lr = 0.05
     optimizer = optim.SGD(params=net.parameters(), lr=lr, momentum=0.9,weight_decay= 5e-4, nesterov=True)
     #optimizer = optim.Adam(params=net.parameters(), lr=7e-3, weight_decay = 4e-3)
     lr_schedule = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max',factor=0.1, verbose= True,patience=5)
