@@ -154,9 +154,9 @@ def main():
     
     resnet = models.resnet34(pretrained=True)
     #提取fc层中固定的参数
-    fc_features = resnet.fc.in_features
+    #fc_features = resnet.fc.in_features
     #修改类别为9
-    resnet.fc = nn.Linear(fc_features, 200)
+    #resnet.fc = nn.Linear(fc_features, 200)
 
     #读取参数
     pretrained_dict = resnet.state_dict()
