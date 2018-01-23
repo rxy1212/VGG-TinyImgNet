@@ -162,7 +162,7 @@ def main():
     #提取fc层中固定的参数
     fc_features = densnet.classifier.in_features
     #修改类别为9
-    densnet.fc = nn.Linear(fc_features, 200)
+    densnet.classifier = nn.Linear(fc_features, 200)
 
     #读取参数
     pretrained_dict = densnet.state_dict()
