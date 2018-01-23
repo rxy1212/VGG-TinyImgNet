@@ -45,7 +45,7 @@ class TIN200Data(data.Dataset):
 
         if data_dir == 'train':
             for path, _, files in os.walk(pjoin(root, 'train')):
-                if len(files) == 500:
+                if len(files) == 1000:
                     self.imgs += [abspath(pjoin(path, f)) for f in files]
                     self.labels += [f.split('_')[0] for f in files]
             self.labels = [self.label_map[label] for label in self.labels]

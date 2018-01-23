@@ -165,11 +165,11 @@ def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = "1"
     torch.cuda.is_available()
 
-    train_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='train')
-    val_data = TIN200Data('/data1/tiny-imagenet-200', '/data1/tiny-imagenet-200/wnids.txt', data_dir='val')
+    train_data = TIN200Data('/data1/fliped-tiny-imagenet-200', '/data1/fliped-tiny-imagenet-200/wnids.txt', data_dir='train')
+    val_data = TIN200Data('/data1/fliped-tiny-imagenet-200', '/data1/fliped-tiny-imagenet-200/wnids.txt', data_dir='val')
 
-    train_loader = DataLoader(train_data, batch_size=64, shuffle=True, num_workers=2)
-    val_loader = DataLoader(val_data, batch_size=64, shuffle=True, num_workers=2)
+    train_loader = DataLoader(train_data, batch_size=128, shuffle=True, num_workers=2)
+    val_loader = DataLoader(val_data, batch_size=128, shuffle=True, num_workers=2)
 
     # model = Model().cuda()
     # model = Test_Model().cuda()
@@ -180,13 +180,13 @@ def main():
     cudnn.benchmark = True
 
     # model.load_state_dict(torch.load('./net_params/VGG11_net_params.pkl'))
-    optimizer = optim.SGD(params=model.parameters(), lr=0.01, momentum=0.8, weight_decay=1e-06, nesterov=True)
+    optimizer = optim.SGD(params=model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-06, nesterov=True)
     # optimizer = optim.Adam(params=model.parameters(), lr=0.05, eps=1e-08, weight_decay=1e-05)
     loss_fn = nn.CrossEntropyLoss()
 
     scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=3, verbose=True)
     best_acc = 0
-    num_epochs = 50
+    num_epochs = 100
     for epoch in range(num_epochs):
         print('Starting epoch %d / %d' % (epoch + 1, num_epochs))
         train(model, loss_fn, optimizer, loader=train_loader)
