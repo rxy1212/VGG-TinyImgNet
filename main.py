@@ -162,7 +162,7 @@ def main():
 
     #读取参数
     pretrained_dict = resnet.state_dict()
-    model_dict =net.state_dict()
+    model_dict = net.state_dict()
     # 将pretrained_dict里不属于model_dict的键剔除掉
     pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
     # 更新现有的model_dict
@@ -172,8 +172,6 @@ def main():
     fc_features = net.fc.in_features
     #修改类别为9
     net.fc = nn.Linear(fc_features, 200)
-    
-
     if use_cuda:
         net.cuda()
         net = torch.nn.DataParallel(
