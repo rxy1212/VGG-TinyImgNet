@@ -125,7 +125,7 @@ def adjust_learning_rate(optimizer, num_epoch):
 
 
 def main():
-    os.environ["CUDA_VISIBLE_DEVICES"] = "2,3"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "2"
     use_cuda = torch.cuda.is_available()
 
     train_datasets = TIN200Data('/data1')
@@ -135,9 +135,9 @@ def main():
     #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
 
     train_loader = data.DataLoader(
-        train_datasets, batch_size=1000, shuffle=True, num_workers=5)
+        train_datasets, batch_size=256, shuffle=True, num_workers=5)
     val_loader = data.DataLoader(
-        val_datasets, batch_size=1000, shuffle=True, num_workers=5)
+        val_datasets, batch_size=256, shuffle=True, num_workers=5)
 
     #net = VGGNet()
     #net = models.resnet18()
