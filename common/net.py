@@ -222,8 +222,8 @@ class GoogleNet(nn.Module):
     def __init__(self):
         super(GoogleNet, self).__init__()
         self.pre_layer = nn.Sequential(
-                            nn.Conv2d(3, 512, kernel_size=3, padding=1),
-                            nn.BatchNorm2d(512),
+                            nn.Conv2d(3, 256, kernel_size=3, padding=1),
+                            nn.BatchNorm2d(256),
                             nn.ReLU(inplace=True),
                             nn.MaxPool2d(3, stride=2, padding=1),    #shape 32x32x256
                             )
