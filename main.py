@@ -156,9 +156,9 @@ def main():
     net = resnet101()
 
     #提取fc层中固定的参数
-    #fc_features = resnet.fc.in_features
+    fc_features = resnet.fc.in_features
     #修改类别为9
-    #resnet.fc = nn.Linear(fc_features, 200)
+    resnet.fc = nn.Linear(fc_features, 200)
 
     #读取参数
     pretrained_dict = resnet.state_dict()
@@ -173,9 +173,9 @@ def main():
     # 加载我们真正需要的state_dict
     net.load_state_dict(model_dict)
 
-    fc_features = net.fc.in_features
+    #fc_features = net.fc.in_features
     #修改类别为200
-    net.fc = nn.Linear(fc_features, 200)
+    #net.fc = nn.Linear(fc_features, 200)
     if use_cuda:
         net.cuda()
         net = torch.nn.DataParallel(
