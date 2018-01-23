@@ -147,13 +147,14 @@ def main():
     #net = DenseNet(64, 28, 0.4, 200, 64)
     #net = resnet18()
     #net = resnet50()
-    net = resnet34(num_classes=200)
+    #net = resnet101(Bottleneck,[3,4,23,3])
     #net = resnet18(num_classes=200)
 
     #net = resnet152()
     #net.cuda()
+    net = ResNet(Bottleneck,[3,4,23,3],num_classes=200)
     
-    resnet = models.resnet34(pretrained=True)
+    resnet = models.resnet101(pretrained=True)
     #提取fc层中固定的参数
     fc_features = resnet.fc.in_features
     #修改类别为9
