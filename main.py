@@ -147,7 +147,7 @@ def main():
     #net = DenseNet(64, 28, 0.4, 200, 64)
     #net = resnet18()
     #net = resnet50()
-    net = resnet101(num_classes=200)
+    net = resnet101()
     #net = resnet18(num_classes=200)
 
     #net = resnet152()
@@ -156,9 +156,9 @@ def main():
     
     resnet = models.resnet101(pretrained=True)
     #提取fc层中固定的参数
-    fc_features = resnet.fc.in_features
+    #fc_features = resnet.fc.in_features
     #修改类别为9
-    resnet.fc = nn.Linear(fc_features, 200)
+    #resnet.fc = nn.Linear(fc_features, 200)
 
     #读取参数
     pretrained_dict = resnet.state_dict()
@@ -169,6 +169,10 @@ def main():
     model_dict.update(pretrained_dict)
     # 加载我们真正需要的state_dict
     net.load_state_dict(model_dict)
+    fc_features = net.fc.in_features
+    #修改类别为9
+    net.fc = nn.Linear(fc_features, 200)
+    
 
     if use_cuda:
         net.cuda()
