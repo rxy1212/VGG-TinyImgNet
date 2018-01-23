@@ -162,8 +162,8 @@ class DenseNet(nn.Module):
         self.features.add_module('norm5', nn.BatchNorm2d(num_features))
 
         # Linear layer
-        self.classifier = nn.Linear(num_features, num_classes)
-        #self.classifier = nn.Linear(num_features*2*2, num_classes)
+        #self.classifier = nn.Linear(num_features, num_classes)
+        self.classifier = nn.Linear(num_features*2*2, num_classes)
         #self.classifier = nn.Linear(num_features * 4 * 4, num_classes)
 
 
