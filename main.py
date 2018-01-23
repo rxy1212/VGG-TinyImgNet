@@ -19,6 +19,7 @@ from common.resnet import resnet50
 from common.resnet import resnet34
 from common.resnet import resnet101
 from common.resnet import resnet152
+from common.resnet import ResNet
 from common.densenet import DenseNet
 from common.dataset import TIN200Data
 from common.utils import localtime, save
@@ -154,9 +155,9 @@ def main():
     
     resnet = models.resnet34(pretrained=True)
     #提取fc层中固定的参数
-    #fc_features = resnet.fc.in_features
+    fc_features = resnet.fc.in_features
     #修改类别为9
-    #resnet.fc = nn.Linear(fc_features, 200)
+    resnet.fc = nn.Linear(fc_features, 200)
 
     #读取参数
     pretrained_dict = resnet.state_dict()
