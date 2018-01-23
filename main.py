@@ -140,19 +140,19 @@ def main():
         val_datasets, batch_size=256, shuffle=True, num_workers=5)
 
     #net = VGGNet()
-    #net = models.resnet18()
+    net = models.resnet34()
     #net.conv1 = nn.Conv2d(3,64,kernel_size = 3,stride=1, padding=1 ,bias=False)
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(64, 28, 0.4, 200, 64)
     #net = resnet18()
     #net = resnet50()
     #net = resnet34()
-    net = resnet101(num_classes=200)
+    #net = resnet18(num_classes=200)
 
     #net = resnet152()
     #net.cuda()
     
-    resnet = models.resnet101(pretrained=True)
+    resnet = models.resnet34(pretrained=True)
     #提取fc层中固定的参数
     fc_features = resnet.fc.in_features
     #修改类别为9
