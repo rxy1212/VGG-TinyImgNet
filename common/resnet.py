@@ -190,7 +190,7 @@ def resnet50(pretrained=False, **kwargs):
     return model
 
 
-def resnet101(pretrained=False, **kwargs):
+def resnet101(pretrained=False,num_classes=200):
     """Constructs a ResNet-101 model.
 
     Args:
