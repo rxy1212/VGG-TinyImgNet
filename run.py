@@ -151,7 +151,7 @@ def main():
     net = DenseNet(growth_rate=64,block_config=(6, 12, 24),bn_size=3)
     #net = DenseNet(growth_rate=48, block_config=(6, 12, 36, 24), drop_rate=0.2)
 
-    net = densenet161()
+    #net = densenet161()
     #net = densenet169()
     #net = densenet121()
     #net = densenet201(growth_rate = 64)
