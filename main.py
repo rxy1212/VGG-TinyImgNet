@@ -176,6 +176,7 @@ def main():
     #fc_features = net.fc.in_features
     #修改类别为200
     #net.fc = nn.Linear(fc_features, 200)
+    print(net)
     if use_cuda:
         net.cuda()
         net = torch.nn.DataParallel(
