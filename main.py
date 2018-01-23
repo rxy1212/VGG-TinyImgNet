@@ -154,13 +154,11 @@ def main():
     #net.cuda()
     #net = ResNet(Bottleneck,[3,4,23,3],num_classes=200)
     
-    resnet1 = models.resnet101(pretrained=True)
+    resnet = models.resnet101(pretrained=True)
     #提取fc层中固定的参数
-    fc_features = resnet1.fc.in_features
+    fc_features = resnet.fc.in_features
     #修改类别为9
-    resnet1.fc = nn.Linear(fc_features, 200)
-
-    resnet = resnet1
+    resnet.fc = nn.Linear(fc_features, 200)
 
     #读取参数
     pretrained_dict = resnet.state_dict()
