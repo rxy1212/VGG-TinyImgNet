@@ -126,7 +126,7 @@ def adjust_learning_rate(optimizer, num_epoch):
 
 
 def main():
-    os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "2,3"
     use_cuda = torch.cuda.is_available()
 
     train_datasets = TIN200Data('/home/zgj/Tiny/')
@@ -136,9 +136,9 @@ def main():
     #     './tiny-imagenet-200', './tiny-imagenet-200/wnids.txt', 'test')
 
     train_loader = data.DataLoader(
-        train_datasets, batch_size=512, shuffle=True, num_workers=5)
+        train_datasets, batch_size=1000, shuffle=True, num_workers=5)
     val_loader = data.DataLoader(
-        val_datasets, batch_size=512, shuffle=True, num_workers=5)
+        val_datasets, batch_size=1000, shuffle=True, num_workers=5)
 
     #net = VGGNet()
     #net = models.resnet34()
@@ -148,12 +148,12 @@ def main():
     #net = resnet18()
     #net = resnet50()    
     #net = resnet18(num_classes=200)
-    #net = resnet152()
+    net = resnet152()
     #net.cuda()
     #net = ResNet(Bottleneck,[3,4,23,3],num_classes=200)
     
     resnet = models.resnet101(pretrained=True)
-    net = resnet101()
+    #net = resnet101()
 
     #提取fc层中固定的参数
     fc_features = resnet.fc.in_features
