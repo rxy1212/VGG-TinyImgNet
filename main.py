@@ -61,7 +61,7 @@ def train(model, loss_fn, optimizer, lr_schedule, num_epochs=1, loader=None, val
         if val_acc > best_val_acc:
             best_val_acc = val_acc
             print("saving net.....")
-            save(model, True, True)
+            save(model, False, True)
         adjust_learning_rate(optimizer,epoch)
         print('-------------------------------')
         print("The best validation accuracy:%.4f%%" % (100 * best_val_acc))
