@@ -146,9 +146,9 @@ def main():
     #net.fc = nn.Linear(4096,200)
     #net = DenseNet(64, 28, 0.4, 200, 64)
     #net = resnet18()
-    #net = resnet50()    
+    net = resnet50()    
     #net = resnet18(num_classes=200)
-    net = resnet152()
+    #net = resnet152()
     #net.cuda()
     #net = ResNet(Bottleneck,[3,4,23,3],num_classes=200)
     
@@ -183,7 +183,7 @@ def main():
             net, device_ids=range(torch.cuda.device_count()))
         cudnn.benchmark = True
 
-    lr = 0.05
+    lr = 0.1
     optimizer = optim.SGD(params=net.parameters(), lr=lr,
                           momentum=0.9, weight_decay=5e-4, nesterov=True)
     #optimizer = optim.Adam(params=net.parameters(), lr=0.1, weight_decay = 5e-3)
