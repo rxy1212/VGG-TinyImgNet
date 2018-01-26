@@ -68,7 +68,7 @@ def check_accuracy(model, loader):
     return acc
 
 def main():
-    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "3"
     torch.cuda.is_available()
 
     train_data = TIN200Data('/data1/fliped-tiny-imagenet-200', '/data1/fliped-tiny-imagenet-200/wnids.txt', data_dir='train')
