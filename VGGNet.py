@@ -84,7 +84,7 @@ def main():
     cudnn.benchmark = True
 
     # model.load_state_dict(torch.load('./net_params/VGG11_net_params.pkl'))
-    optimizer = optim.SGD(params=model.parameters(), lr=0.01, momentum=0.9, weight_decay=1e-06, nesterov=True)
+    optimizer = optim.SGD(params=model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-06, nesterov=True)
     # optimizer = optim.Adam(params=model.parameters(), lr=0.05, eps=1e-08, weight_decay=1e-05)
     loss_fn = nn.CrossEntropyLoss()
 
@@ -104,9 +104,8 @@ def main():
         scheduler.step(val_acc, epoch=epoch+1)
 
     # torch.save(model.state_dict(),'./net_params/GoogleNet_net_params2.pkl')
-    torch.save(model, './net_params/GoogleNet.pkl')
+    torch.save(model, './net_params/ResNet.pkl')
 
 
 if __name__ == '__main__':
     main()
-    
