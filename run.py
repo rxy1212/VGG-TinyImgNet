@@ -57,7 +57,7 @@ def train(model, loss_fn, optimizer, lr_schedule, num_epochs=1, loader=None, val
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-        val_acc = check_accuracy(model,val_loader)
+        val_acc = check_top5_accuracy(model,val_loader)
         lr_schedule.step(val_acc, epoch=epoch+1)
         if val_acc > best_val_acc:
             best_val_acc = val_acc
