@@ -89,6 +89,25 @@ def check_accuracy(model, loader):
     print('Got %d / %d correct (%.4f%%)' % (val_correct, val_samples, 100 * val_acc))
     return val_acc
 
+def check_top5_accuracy(model, loader):
+    print('Checking Top_5 accuracy on validation set')
+
+    val_correct = 0
+    val_samples = 0
+    # Put the model in test mode (the opposite of model.train(), essentially)
+    model.eval()
+    for x, y in loader:
+        # reference https://pytorch-cn.readthedocs.io/zh/latest/notes/autograd/
+        x_var = Variable(x, volatile=True)
+
+        scores = model(x_var.type(torch.cuda.FloatTensor))
+        _, preds = scores.data.cpu().sort(1)
+        val_correct += (preds[:5] == y).sum()
+        val_samples += preds.size(0)
+    val_acc = float(val_correct) / val_samples
+    print('Got %d / %d correct (%.4f%%)' % (val_correct, val_samples, 100 * val_acc))
+    return val_acc
+
 
 def predict(model, loader):
     from os.path import join as pjoin
