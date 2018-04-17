@@ -51,8 +51,8 @@ def train(model, loss_fn, optimizer, lr_schedule, num_epochs=1, loader=None, val
             num_samples += preds.size(0)
             acc = float(num_correct) / num_samples
             if (t + 1) % 20 == 0:
-                print('t = %d, loss = %.4f, acc = %.4f%%' %
-                      (t + 1, loss.data[0], 100 * acc))
+                print('epoch = %d, t = %d, loss = %.4f, acc = %.4f%%' %
+                      (epoch+1, t+1, loss.data[0], 100 * acc))
 
             optimizer.zero_grad()
             loss.backward()
@@ -101,7 +101,7 @@ def check_top5_accuracy(model, loader):
         x_var = Variable(x, volatile=True)
 
         scores = model(x_var.type(torch.cuda.FloatTensor))
-        _, preds = scores.sort(1,True)
+        _, preds = scores.data.cpu().sort(1,True)
         val_correct += (preds[:,0:5] == y).sum()
         val_samples += preds.size(0)
     val_acc = float(val_correct) / val_samples
