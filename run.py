@@ -101,8 +101,8 @@ def check_top5_accuracy(model, loader):
         x_var = Variable(x, volatile=True)
 
         scores = model(x_var.type(torch.cuda.FloatTensor))
-        _, preds = scores.data.cpu().sort(1)
-        val_correct += (preds[:5] == y).sum()
+        _, preds = scores.sort(1,True)
+        val_correct += (preds[:,0:5] == y).sum()
         val_samples += preds.size(0)
     val_acc = float(val_correct) / val_samples
     print('Got %d / %d correct (%.4f%%)' % (val_correct, val_samples, 100 * val_acc))
