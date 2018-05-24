@@ -31,7 +31,7 @@ class TIN200Data(data.Dataset):
     def __init__(self, root, data_dir='train',
                  loader=None, transform=transforms.ToTensor()):
         assert data_dir in (
-            'train', 'val', 'test')   "data_dir must be 'train', 'val' or 'test'"
+            'train', 'val', 'test') ,"data_dir must be 'train', 'val' or 'test'"
         self.imgs = []
         self.labels = []
         self.data_dir = data_dir
